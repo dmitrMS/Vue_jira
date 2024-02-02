@@ -1,14 +1,7 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import SignIn from "../views/SignIn";
 import SignUp from "../views/SignUp";
-import App from "../App.vue";
-// Vue.use(VueRouter);
-// const app = Vue.createApp({
-//   router,
-// });
-
-// app.mount("#app");
+import TrackPage from "../views/TrackPage";
 
 const routes = [
   {
@@ -17,20 +10,20 @@ const routes = [
     component: SignIn,
   },
   {
-    path: "/SignUp",
+    path: "/sign_up",
     name: "SignUp",
     component: SignUp,
   },
+  {
+    path: "/track",
+    name: "TrackPage",
+    component: TrackPage,
+  },
 ];
 
-const router = new VueRouter({
-  mode: "history",
+const router = createRouter({
+  history: createWebHashHistory(),
   routes,
 });
-// const router = createRouter({
-//     history: createWebHistory(process.env.BASE_URL),
-//     routes
-//   })
-// Vue(App).use(router).mount("#app");
 
 export default router;
