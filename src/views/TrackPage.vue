@@ -17,10 +17,10 @@
 export default {
   data() {
     return {
-      work: "Start",
+      work: 'Start'
     };
   },
-  name: "TrackPage",
+  name: 'TrackPage'
 };
 </script>
 
