@@ -1,54 +1,77 @@
 <template>
-  <div class="authbody">
-    <h1>Please sing in</h1>
-    <div class="auth">
-      <p>login:</p>
-      <input class="input_auth" type="text" />
-      <p>password:</p>
-      <input class="input_auth" type="text" />
-    </div>
-    <br />
+  <div class="authbodysignin">
     <div class="txt">
-      <router-link to="/track" custom v-slot="{ navigate }">
-        <button class="button_auth" @click="navigate" role="link">
-          Sign In
-        </button> </router-link
-      ><br />
-      <router-link to="/sign_up">I already have account</router-link>
-      <router-view></router-view>
+      <h1>Please sing in</h1>
+      <div class="auth">
+        <p>login:</p>
+        <input type="text" v-model="login" />
+        <p>password:</p>
+        <input type="text" v-model="password" />
+      </div>
+      <br />
+      <button @click="get_authentification" role="link">
+        Sign In
+      </button>
+      <p>{{ info }}</p>
+      <router-link to="/sign_up">I don't have account</router-link>
     </div>
   </div>
+  <div class="fon"/>
 </template>
 
 <script>
 export default {
-  name: 'SignIn'
+  name: 'SignIn',
+  data() {
+    return {
+      info: '',
+      password: null,
+      login: null
+    };
+  },
+  methods: {
+    async get_authentification() {
+      const { data } = await this.axios.post(
+        process.env.VUE_APP_URL + '/auth/signin',
+        {
+          login: this.login,
+          password: this.password,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      this.$store.dispatch('update_jwt', data.jwt);
+      this.info = data.message;
+      if (data.jwt !== undefined) this.$router.push({ path: '/track' });
+    }
+  }
 };
 </script>
 
 <style>
-html {
+.authbodysignin {
+  width: 100%;
+  height: 100%;
+  background-position: left top;
+  background-size: cover;
   background-color: #7ab7f0d7;
 }
-.authbody {
-  margin: 0 0;
-  text-align: center;
-  font-style: italic;
-  line-height: 5;
-  transform: translate(0%, 25%);
-}
-.auth input {
+
+.authbodysignin .auth input {
   background-color: #7ab7f000;
   border: 0px solid;
   border-bottom: 2px solid #000000;
   width: 200px;
   opacity: 100%;
 }
-a {
+
+.authbodysignin a {
   color: #000000d7;
   font-size: 16pt;
 }
-.authbody button {
+
+.authbodysignin button {
   background-color: #2e78bdd7;
   color: #ffffffd7;
   border: 0px solid;
@@ -58,14 +81,28 @@ a {
   font-weight: normal;
   border-radius: 30px;
 }
-h1 {
+
+.authbodysignin h1 {
   font-weight: normal;
 }
-.txt {
-  line-height: 2;
+
+.authbodysignin .txt {
+  text-align: center;
+  font-style: italic;
+  line-height: 5;
+  transform: translate(0%, 25%);
 }
-.auth {
+
+.authbodysignin .auth {
   font-size: 16pt;
   line-height: 0;
+}
+
+.authbodysignin .fon {
+  background-color: #7ab7f0d7;
+  background-position: bottom right;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

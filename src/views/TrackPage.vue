@@ -1,15 +1,15 @@
 <template>
+  <div class="all_body">
   <div class="rout_link">
     <p><img src="../assets/logo.png" /></p>
     <p><router-link to="/">logout</router-link></p>
-    <br />
   </div>
   <div class="track_body">
     <input type="text" />
     <div class="txt">
       <button>{{ work }}</button>
-      <router-view></router-view>
     </div>
+  </div>
   </div>
 </template>
 
@@ -25,16 +25,20 @@ export default {
 </script>
 
 <style>
-html {
+.all_body
+{
   background-color: #7ab7f0d7;
 }
+
 .track_body {
+  background-color: #7ab7f0d7;
   margin: 0 0;
   font-style: italic;
   line-height: 5;
   display: inline-flex;
   transform: translate(5%, 200%);
 }
+
 .track_body input {
   border: 0px solid;
   border-radius: 30px;
@@ -42,6 +46,7 @@ html {
   width: 1200px;
   opacity: 100%;
 }
+
 .track_body button {
   background-color: #16558fd7;
   color: #ffffffd7;
@@ -52,6 +57,7 @@ html {
   font-weight: normal;
   transform: translate(10%, 0%);
 }
+
 .rout_link {
   display: inline-flex;
   transform: translate(1800%, 0%);
@@ -59,6 +65,7 @@ html {
   color: #000000d7;
   font-size: 16pt;
 }
+
 .rout_link img {
   width: 30px;
   height: 30px;
