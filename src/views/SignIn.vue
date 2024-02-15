@@ -51,11 +51,11 @@ export default {
 
 <style>
 .authbodysignin {
-  width: 100%;
-  height: 100%;
-  background-position: left top;
-  background-size: cover;
   background-color: #7ab7f0d7;
+  background-position: bottom right;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 .authbodysignin .auth input {
@@ -87,6 +87,7 @@ export default {
 }
 
 .authbodysignin .txt {
+  margin: 0 0;
   text-align: center;
   font-style: italic;
   line-height: 5;

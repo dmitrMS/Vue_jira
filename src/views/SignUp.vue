@@ -57,15 +57,6 @@ export default {
   height: 100vh;
 
 }
-</style>
-<!-- <style>
-.authbody {
-  width: 100%;
-  height: 100%;
-  background-position: left top;
-  background-size: cover;
-  background-color: #7ab7f0d7;
-}
 
 .authbody .auth input {
   background-color: #7ab7f000;
@@ -107,4 +98,4 @@ export default {
   font-size: 16pt;
   line-height: 0;
 }
-</style> -->
+</style> 
