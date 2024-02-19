@@ -41,8 +41,15 @@ export default {
           }
         }
       );
+
       this.$store.dispatch('update_jwt', data.jwt);
+      // console.log(data.jwt);
+      // localStorage.removeItem('jwt');
+      // localStorage.setItem('jwt', data.jwt);
+      this.$api.sign_in(data.jwt);
+      console.log(this.$api.connect('jwt'));
       this.info = data.message;
+      
       if (data.jwt !== undefined) this.$router.push({ path: '/track' });
     }
   }

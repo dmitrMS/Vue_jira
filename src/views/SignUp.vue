@@ -13,7 +13,7 @@
         Sign Up
       </button>
       <br />
-      <router-link to="/">I already have account</router-link>
+      <router-link to="/" @click="localstorage">I already have account</router-link>
     </div>
   </div>
 </template>
@@ -40,10 +40,14 @@ export default {
           }
         }
       );
+      
       this.$store.dispatch('update_jwt', data.jwt);
+      this.api.sign_in(data.jwt);
+      console.log(localStorage.getItem('jwt'));
       this.info = data.message;
+
       if (data.jwt !== undefined) this.$router.push({ path: '/track' });
-    }
+    },
   }
 };
 </script>

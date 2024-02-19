@@ -6,9 +6,10 @@ export class Api {
   async sign_in(value) {
     localStorage.removeItem('jwt');
     localStorage.setItem('jwt', value);
+    return localStorage.getItem('jwt');
   }
 
-  async connect(value) {
-    return localStorage.getItem('jwt', value);
+  async connect() {
+    return localStorage.getItem('jwt');
   }
 }

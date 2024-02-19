@@ -28,6 +28,10 @@ export default {
 .all_body
 {
   background-color: #7ab7f0d7;
+  background-position: bottom right;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
 }
 
 .track_body {
