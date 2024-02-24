@@ -16,17 +16,21 @@
       <router-link to="/sign_up">I don't have account</router-link>
     </div>
   </div>
-  <div class="fon"/>
+  <div class="fon">
+  </div>
 </template>
 
 <script>
+import {Api} from '../api/index.js';
+
 export default {
   name: 'SignIn',
   data() {
     return {
       info: '',
       password: null,
-      login: null
+      login: null,
+      api: new Api()
     };
   },
   methods: {
@@ -43,13 +47,9 @@ export default {
       );
 
       this.$store.dispatch('update_jwt', data.jwt);
-      // console.log(data.jwt);
-      // localStorage.removeItem('jwt');
-      // localStorage.setItem('jwt', data.jwt);
-      this.$api.sign_in(data.jwt);
-      console.log(this.$api.connect('jwt'));
+      this.api.sign_in(data.jwt);
       this.info = data.message;
-      
+
       if (data.jwt !== undefined) this.$router.push({ path: '/track' });
     }
   }
@@ -94,7 +94,6 @@ export default {
 }
 
 .authbodysignin .txt {
-  margin: 0 0;
   text-align: center;
   font-style: italic;
   line-height: 5;

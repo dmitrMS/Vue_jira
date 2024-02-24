@@ -2,7 +2,7 @@
   <div class="all_body">
   <div class="rout_link">
     <p><img src="../assets/logo.png" /></p>
-    <p><router-link to="/">logout</router-link></p>
+    <p @click="user_logout">logout</p>
   </div>
   <div class="track_body">
     <input type="text" />
@@ -14,13 +14,23 @@
 </template>
 
 <script>
+import {Api} from '../api/index.js';
+
 export default {
   data() {
     return {
-      work: 'Start'
+      work: 'Start',
+      api: new Api()
     };
   },
-  name: 'TrackPage'
+  name: 'TrackPage',
+  methods:{
+    async user_logout() {
+      this.$store.dispatch('update_jwt', '');
+      this.api.logout();
+      this.$router.push({ path: '/' });
+    }
+  }
 };
 </script>
 
@@ -35,7 +45,6 @@ export default {
 }
 
 .track_body {
-  background-color: #7ab7f0d7;
   margin: 0 0;
   font-style: italic;
   line-height: 5;
