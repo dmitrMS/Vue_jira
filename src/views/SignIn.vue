@@ -9,19 +9,16 @@
         <input type="text" v-model="password" />
       </div>
       <br />
-      <button @click="get_authentification" role="link">
-        Sign In
-      </button>
+      <button @click="get_authentification" role="link">Sign In</button>
       <p>{{ info }}</p>
       <router-link to="/sign_up">I don't have account</router-link>
     </div>
   </div>
-  <div class="fon">
-  </div>
+  <div class="fon"></div>
 </template>
 
 <script>
-import {Api} from '../api/index.js';
+import { Api } from '../api/index.js';
 
 export default {
   name: 'SignIn',

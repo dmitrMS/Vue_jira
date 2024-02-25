@@ -42,8 +42,7 @@ export default {
 
       this.$store.dispatch('update_jwt', data.jwt);
 
-      if (data.jwt !== undefined) 
-      this.$router.push({ path: '/track' });
+      if (data.jwt !== undefined) this.$router.push({ path: '/track' });
     }
   }
 };
@@ -56,7 +55,6 @@ export default {
   position: absolute;
   width: 100vw;
   height: 100vh;
-
 }
 
 .authbody .auth input {
@@ -99,4 +97,4 @@ export default {
   font-size: 16pt;
   line-height: 0;
 }
-</style> 
+</style>

@@ -1,7 +1,5 @@
 export class Api {
-    constructor() {
-      // this.jwt=jwt;
-    }
+    constructor() {}
   
     async sign_in(value) {
       localStorage.removeItem('jwt');

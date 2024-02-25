@@ -12,6 +12,9 @@ export const store = createStore({
     change_jwt(state, payload) {
       state.jwt = payload;
     },
+    change_id(state, payload) {
+      state.id = payload;
+    },
     change_login(state, payload) {
       state.login = payload;
     },
@@ -22,6 +25,9 @@ export const store = createStore({
   actions: {
     update_jwt({ commit }, note) {
       commit('change_jwt', note);
+    },
+    update_id({ commit }, note) {
+      commit('change_id', note);
     },
     update_login({ commit }, note) {
       commit('change_login', note);
@@ -34,4 +40,3 @@ export const store = createStore({
     }
   }
 });
-// поменять названия
