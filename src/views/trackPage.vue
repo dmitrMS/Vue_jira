@@ -1,32 +1,32 @@
 <template>
-  <div class="all_body">
-  <div class="rout_link">
-    <p><img src="../assets/logo.png" /></p>
-    <p @click="user_logout">logout</p>
-  </div>
-  <div class="track_body">
-    <input type="text" />
-    <div class="txt">
-      <button>{{ work }}</button>
+  <div class="all-body">
+    <div class="rout-link">
+      <p><img src="../assets/logo.png" /></p>
+      <p @click="userLogout">logout</p>
     </div>
-  </div>
+    <div class="track-body">
+      <input type="text" />
+      <div class="txt">
+        <button>{{ workAppText }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import {Api} from '../api/index.js';
+import { api } from '../api/index.js';
 
 export default {
   data() {
     return {
-      work: 'Start',
-      api: new Api()
+      workAppText: 'Start',
+      api: api
     };
   },
   name: 'TrackPage',
-  methods:{
-    async user_logout() {
-      this.$store.dispatch('update_jwt', '');
+  methods: {
+    userLogout() {
+      this.$store.dispatch('updateJwt', '');
       this.api.logout();
       this.$router.push({ path: '/' });
     }
@@ -35,8 +35,7 @@ export default {
 </script>
 
 <style>
-.all_body
-{
+.all-body {
   background-color: #7ab7f0d7;
   background-position: bottom right;
   position: absolute;
@@ -44,7 +43,7 @@ export default {
   height: 100vh;
 }
 
-.track_body {
+.track-body {
   margin: 0 0;
   font-style: italic;
   line-height: 5;
@@ -52,7 +51,7 @@ export default {
   transform: translate(5%, 200%);
 }
 
-.track_body input {
+.track-body input {
   border: 0px solid;
   border-radius: 30px;
   height: 35px;
@@ -60,7 +59,7 @@ export default {
   opacity: 100%;
 }
 
-.track_body button {
+.track-body button {
   background-color: #16558fd7;
   color: #ffffffd7;
   border: 0px solid;
@@ -71,7 +70,7 @@ export default {
   transform: translate(10%, 0%);
 }
 
-.rout_link {
+.rout-link {
   display: inline-flex;
   transform: translate(1800%, 0%);
   text-align: right;
@@ -79,7 +78,7 @@ export default {
   font-size: 16pt;
 }
 
-.rout_link img {
+.rout-link img {
   width: 30px;
   height: 30px;
   transform: translate(-100%, 0%);

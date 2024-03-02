@@ -8,9 +8,8 @@
         <p>password:</p>
         <input type="text" v-model="password" />
       </div>
-      <br />
-      <button @click="get_authentification" role="link">Sign In</button>
-      <p>{{ info }}</p>
+      <button @click="getAuthentification" role="link">Sign In</button>
+      <p>{{ serverMessage }}</p>
       <router-link to="/sign_up">I don't have account</router-link>
     </div>
   </div>
@@ -18,36 +17,27 @@
 </template>
 
 <script>
-import { Api } from '../api/index.js';
-
 export default {
   name: 'SignIn',
   data() {
     return {
-      info: '',
-      password: null,
-      login: null,
-      api: new Api()
+      serverMessage: '',
+      password: '',
+      login: ''
     };
   },
   methods: {
-    async get_authentification() {
-      const { data } = await this.axios.post(
-        process.env.VUE_APP_URL + '/auth/signin',
-        {
-          login: this.login,
-          password: this.password,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+    async getAuthentification() {
+      const config = {
+        login: this.login,
+        password: this.password,
+        path: '/auth/signin'
+      };
+      const request = await this.$store.dispatch('getJwt', config);
 
-      this.$store.dispatch('update_jwt', data.jwt);
-      this.api.sign_in(data.jwt);
-      this.info = data.message;
+      this.serverMessage = request.message;
 
-      if (data.jwt !== undefined) this.$router.push({ path: '/track' });
+      if (request.jwt !== undefined) this.$router.push({ path: '/track' });
     }
   }
 };
@@ -84,6 +74,7 @@ export default {
   font-size: 16pt;
   font-weight: normal;
   border-radius: 30px;
+  margin: 2%;
 }
 
 .authbodysignin h1 {

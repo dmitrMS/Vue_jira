@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import { api } from '../api/index.js';
 
 export const store = createStore({
   state: {
@@ -9,31 +10,45 @@ export const store = createStore({
   },
   getters: {},
   mutations: {
-    change_jwt(state, payload) {
+    changeJwt(state, payload) {
       state.jwt = payload;
     },
-    change_id(state, payload) {
+    changeId(state, payload) {
       state.id = payload;
     },
-    change_login(state, payload) {
+    changeLogin(state, payload) {
       state.login = payload;
     },
-    change_password(state, payload) {
+    changePassword(state, payload) {
       state.password = payload;
     }
   },
   actions: {
-    update_jwt({ commit }, note) {
-      commit('change_jwt', note);
+    updateJwt({ commit }, note) {
+      commit('changeJwt', note);
     },
-    update_id({ commit }, note) {
-      commit('change_id', note);
+    async getJwt({ commit }, config) {
+      const jwt = api.signIn(config.login, config.password, config.path);
+
+      commit('changeJwt', jwt);
+
+      return jwt;
     },
-    update_login({ commit }, note) {
-      commit('change_login', note);
+    verifyJwt({ commit }) {
+      const jwt = api.connect();
+
+      commit('changeJwt', jwt);
+
+      return jwt;
     },
-    update_password({ commit }, note) {
-      commit('change_password', note);
+    updateId({ commit }, note) {
+      commit('changeId', note);
+    },
+    updateLogin({ commit }, note) {
+      commit('changeLogin', note);
+    },
+    updatePassword({ commit }, note) {
+      commit('changePassword', note);
     },
     save_jwt() {
       localStorage.jwt = this.jwt;

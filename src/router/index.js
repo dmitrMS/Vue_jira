@@ -1,23 +1,23 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import SignIn from '../views/SignIn';
-import SignUp from '../views/SignUp';
-import TrackPage from '../views/TrackPage';
+import signIn from '../views/signIn';
+import signUp from '../views/signUp';
+import trackPage from '../views/trackPage';
 
 const routes = [
   {
     path: '/',
-    name: 'SignIn',
-    component: SignIn
+    name: 'signIn',
+    component: signIn
   },
   {
     path: '/sign_up',
-    name: 'SignUp',
-    component: SignUp
+    name: 'signUp',
+    component: signUp
   },
   {
     path: '/track',
-    name: 'TrackPage',
-    component: TrackPage
+    name: 'trackPage',
+    component: trackPage
   }
 ];
 

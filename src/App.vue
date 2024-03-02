@@ -3,45 +3,29 @@
 </template>
 
 <script>
-import { Api } from './api/index.js';
+import { api } from './api/index.js';
 
 export default {
   data() {
     return {
-      api: new Api()
+      api: api
     };
   },
   methods: {
-    async get_authentification() {
-      try{
-      const connect_res_data = {};
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-key': await this.api.connect('jwt')
-        }
-      };
-      const { data } = await this.axios.post(
-        process.env.VUE_APP_URL + '/auth/connect',
-        connect_res_data,
-        config
-      );
-
-      this.$store.dispatch('update_jwt', data.jwt);
-      this.api.sign_in(data.jwt);
-      this.info = data.message;
+    async getAuthentification() {
+      try { 
+      await this.$store.dispatch('verifyJwt');
       this.$router.push({ path: '/track' });
 
-      return true;
-    }
-    catch
-    {
-      return null;
+    } catch (err) {
+        console.log(err);
+
+        this.$router.push({ path: '/' });
     }
     }
   },
   created () {
-    this.get_authentification();
+    this.getAuthentification();
   }
 };
 </script>

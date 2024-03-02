@@ -8,8 +8,7 @@
         <p>password:</p>
         <input class="input_auth" type="text" v-model="password" />
       </div>
-      <br />
-      <button class="button_auth" @click="get_authentification" role="link">
+      <button class="button_auth" @click="getAuthentification" role="link">
         Sign Up
       </button>
       <br />
@@ -23,26 +22,20 @@ export default {
   name: 'SignUp',
   data() {
     return {
-      password: null,
-      login: null
+      password: '',
+      login: ''
     };
   },
   methods: {
-    async get_authentification() {
-      const { data } = await this.axios.post(
-        process.env.VUE_APP_URL + '/auth/signup',
-        {
-          login: this.login,
-          password: this.password,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }
-      );
+    async getAuthentification() {
+      const config = {
+        login: this.login,
+        password: this.password,
+        path: '/auth/signup'
+      };
+      const request = await this.$store.dispatch('getJwt', config);
 
-      this.$store.dispatch('update_jwt', data.jwt);
-
-      if (data.jwt !== undefined) this.$router.push({ path: '/track' });
+      if (request !== undefined) this.$router.push({ path: '/track' });
     }
   }
 };
@@ -79,6 +72,7 @@ export default {
   font-size: 16pt;
   font-weight: normal;
   border-radius: 30px;
+  margin: 2%;
 }
 
 .authbody h1 {
