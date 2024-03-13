@@ -1,13 +1,13 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import signIn from '../views/signIn';
-import signUp from '../views/signUp';
-import trackPage from '../views/trackPage';
+import signIn from '../views/SignIn.vue';
+import signUp from '../views/SignUp.vue';
+import trackPage from '../views/TrackPage.vue';
 
 const routes = [
   {
     path: '/',
     name: 'signIn',
-    component: signIn
+    component: signIn,
   },
   {
     path: '/sign_up',
@@ -17,7 +17,7 @@ const routes = [
   {
     path: '/track',
     name: 'trackPage',
-    component: trackPage
+    component: trackPage,
   }
 ];
 

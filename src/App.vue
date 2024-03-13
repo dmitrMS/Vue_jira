@@ -8,7 +8,12 @@ import { api } from './api/index.js';
 export default {
   data() {
     return {
-      api: api
+      api: api,
+      computed: {
+            layout(){
+                return this.$route.meta.layout 
+            }
+        }
     };
   },
   methods: {

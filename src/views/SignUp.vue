@@ -1,20 +1,25 @@
 <template>
-  <div class="authbody">
-    <div class="txt">
-      <h1>Please sing up</h1>
-      <div class="auth">
-        <p>login:</p>
-        <input class="input_auth" type="text" v-model="login" />
-        <p>password:</p>
-        <input class="input_auth" type="text" v-model="password" />
-      </div>
-      <button class="button_auth" @click="getAuthentification" role="link">
-        Sign Up
-      </button>
-      <br />
-      <router-link to="/">I already have account</router-link>
-    </div>
+  <div id="components-demo">
+    <no-auth-layout> 
+  </no-auth-layout> 
   </div>
+    <div class="authbody">
+      <div class="txt">
+        <h1>Please sing up</h1>
+        <div class="auth">
+          <p>login:</p>
+          <input class="input_auth" type="text" v-model="login" />
+          <p>password:</p>
+          <input class="input_auth" type="text" v-model="password" />
+        </div>
+        <button class="button_auth" @click="getAuthentification" role="link">
+          Sign Up
+        </button>
+        <br />
+        <router-link to="/">I already have account</router-link>
+      </div>
+    </div>
+  
 </template>
 
 <script>

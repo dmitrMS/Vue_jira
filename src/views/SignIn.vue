@@ -1,4 +1,7 @@
 <template>
+  <div id="components-demo">
+    <no-auth-layout> </no-auth-layout>
+  </div>
   <div class="authbodysignin">
     <div class="txt">
       <h1>Please sing in</h1>
