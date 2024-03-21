@@ -1,25 +1,42 @@
 <template>
   <div id="components-demo">
-    <no-auth-layout> 
-  </no-auth-layout> 
+    <no-auth-layout> </no-auth-layout>
   </div>
-    <div class="authbody">
-      <div class="txt">
-        <h1>Please sing up</h1>
-        <div class="auth">
-          <p>login:</p>
-          <input class="input_auth" type="text" v-model="login" />
-          <p>password:</p>
-          <input class="input_auth" type="text" v-model="password" />
-        </div>
-        <button class="button_auth" @click="getAuthentification" role="link">
-          Sign Up
-        </button>
-        <br />
-        <router-link to="/">I already have account</router-link>
+  <div class="authbody">
+    <div class="txt">
+      <h1>Please sing up</h1>
+      <div class="auth">
+        <p>login:</p>
+        <FloatLabel>
+          <InputText id="username" v-model="login" />
+        </FloatLabel>
+        <p>password:</p>
+        <FloatLabel>
+          <Password v-model="password" inputId="password">
+            <template #header>
+              <h6>Введите пароль</h6>
+            </template>
+            <template #footer>
+              <Divider />
+              <p class="mt-2">Пароль должен содержать:</p>
+              <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                <li>Хотя бы одну букву в нижнем регистре</li>
+                <li>Хотя бы одну букву в верхнем регистре</li>
+                <li>Хотя бы одну цифру</li>
+                <li>1 спец символ</li>
+                <li>Минимум 8 символов</li>
+              </ul>
+            </template>
+          </Password>
+        </FloatLabel>
       </div>
+      <button class="button_auth" @click="getAuthentification" role="link">
+        Sign Up
+      </button>
+      <br />
+      <router-link to="/">I already have account</router-link>
     </div>
-  
+  </div>
 </template>
 
 <script>
@@ -28,19 +45,26 @@ export default {
   data() {
     return {
       password: '',
-      login: ''
+      login: '',
+      value: null
     };
   },
   methods: {
     async getAuthentification() {
-      const config = {
-        login: this.login,
-        password: this.password,
-        path: '/auth/signup'
-      };
-      const request = await this.$store.dispatch('getJwt', config);
+      const regex =
+        /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{8,}/g;
+      const symbol = this.password.match(regex);
+      console.log(symbol);
+      if (symbol !== null) {
+        const config = {
+          login: this.login,
+          password: this.password,
+          path: '/auth/signup'
+        };
+        const request = await this.$store.dispatch('getJwt', config);
 
-      if (request !== undefined) this.$router.push({ path: '/track' });
+        if (request !== undefined) this.$router.push({ path: '/track' });
+      }
     }
   }
 };
@@ -61,6 +85,10 @@ export default {
   border-bottom: 2px solid #000000;
   width: 200px;
   opacity: 100%;
+}
+
+.authbody .auth input:focus {
+  outline: none;
 }
 
 .authbody a {

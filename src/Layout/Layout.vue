@@ -1,50 +1,75 @@
 <template>
-  <a-layout class="layout">
-    <a-layout-header>
-      <div class="logo" />
-      <a-menu
-        theme="dark"
-        mode="horizontal"
-        v-model:selectedKeys="selectedKeys"
-      >
-        <a-menu-item key="1">Трекинг</a-menu-item>
-        <a-menu-item key="2">Прогресс</a-menu-item>
-        <a-menu-item key="3">Cправка</a-menu-item>
-        <a-menu-item class="site-header-content" @click="showModal"
-          >Выход</a-menu-item
-        >
-        <a-modal
-          v-model:open="open"
-          title="Вы действительно хотите выйти?"
-          ok-text="Да" 
-          cancel-text="Нет"
-          @ok="userLogout"
-        >
-        </a-modal>
-      </a-menu>
-    </a-layout-header>
-    <a-layout-content></a-layout-content>
-  </a-layout>
+  <div class="layout-auth">
+    <div class="card">
+      <Menubar :model="items">
+        <template #item="{ item, props, hasSubmenu }">
+          <router-link
+            v-if="item.route"
+            v-slot="{ href, navigate }"
+            :to="item.route"
+            custom
+          >
+            <a v-ripple :href="href" v-bind="props.action" @click="navigate">
+              <span :class="item.icon" />
+              <span class="ml-2">{{ item.label }}</span>
+            </a>
+          </router-link>
+          <a
+            v-else
+            v-ripple
+            :href="item.url"
+            :target="item.target"
+            v-bind="props.action"
+          >
+            <span :class="item.icon" />
+            <span class="ml-2">{{ item.label }}</span>
+            <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
+          </a>
+        </template>
+      </Menubar>
+    </div>
+  </div>
 </template>
 
 <script>
-import { api } from '../api/index.js';
-
 export default {
-  name: 'SignIn',
   data() {
     return {
-      api: api,
-      open: false
+      items: [
+        {
+          label: 'Обзор',
+          icon: 'pi pi-palette',
+          command: () => {
+            this.$router.push('/track/review');
+          }
+        },
+        {
+          label: 'Трэкинг',
+          icon: 'pi pi-link',
+          command: () => {
+            this.$router.push('/track');
+          }
+        },
+        {
+          label: 'Информация об аккаунте',
+          icon: 'pi pi-link',
+          command: () => {
+            this.$router.push('/track/account');
+          }
+        },
+        {
+          label: 'Выйти',
+          icon: 'pi pi-home',
+          command: () => {
+            this.userLogout();
+          }
+        }
+      ]
     };
   },
   methods: {
-    showModal() {
-      this.open = true;
-    },
     userLogout() {
-      this.$store.dispatch('updateJwt', '');
-      this.api.logout();
+      this.$store.dispatch('logoutJwt');
       this.$router.push({ path: '/' });
     }
   }
@@ -52,24 +77,27 @@ export default {
 </script>
 
 <style>
-.site-layout-content {
-  background: #fff;
-}
-
-.site-header-content {
-  margin-left: auto;
-  margin-right: 0;
-}
-
-#components-layout-demo-top .logo {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.ant-row-rtl #components-layout-demo-top .logo {
-  margin-right: 0;
-}
-
-[data-theme='dark'] .site-layout-content {
-  background: #141414;
+.layout-auth {
+  /* background-position: bottom left; */
+  position: right fixed;
+  /* width: 100vw; */
 }
 </style>
+
+<style scoped>
+html {
+  margin: 0;
+}
+body {
+  margin: 0;
+}
+</style>
+
+<!-- <style scoped>
+.card {
+  background-position: bottom right;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+</style> -->

@@ -1,5 +1,9 @@
 <template>
+  <div id="components-demo">
   <router-view />
+  
+    <footer-layout class="footer-bottom"/>
+  </div>
 </template>
 
 <script>
@@ -37,6 +41,7 @@ export default {
 
 <style>
 body {
-  margin: 0px;
+  margin: 0;
+  overflow-x: hidden;
 }
 </style>

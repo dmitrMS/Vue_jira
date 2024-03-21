@@ -1,17 +1,21 @@
 <template>
   <div id="components-demo">
-    <no-auth-layout> </no-auth-layout>
+    <no-auth-layout/>
   </div>
   <div class="authbodysignin">
     <div class="txt">
       <h1>Please sing in</h1>
       <div class="auth">
         <p>login:</p>
-        <input type="text" v-model="login" />
+        <FloatLabel>
+          <InputText id="username" v-model="login" />
+        </FloatLabel>
         <p>password:</p>
-        <input type="text" v-model="password" />
+        <FloatLabel>
+          <Password v-model="password" :feedback="false" />
+        </FloatLabel>
       </div>
-      <button @click="getAuthentification" role="link">Sign In</button>
+      <button role="button" @click="getAuthentification">Sign In</button>
       <p>{{ serverMessage }}</p>
       <router-link to="/sign_up">I don't have account</router-link>
     </div>
@@ -49,18 +53,24 @@ export default {
 <style>
 .authbodysignin {
   background-color: #7ab7f0d7;
-  background-position: bottom right;
+  /* background-position: bottom right; */
   position: absolute;
   width: 100vw;
   height: 100vh;
+  overflow: hidden;
 }
 
 .authbodysignin .auth input {
   background-color: #7ab7f000;
-  border: 0px solid;
+  border: 0;
   border-bottom: 2px solid #000000;
   width: 200px;
   opacity: 100%;
+}
+
+.authbodysignin .auth input:focus 
+{
+  outline:none;
 }
 
 .authbodysignin a {

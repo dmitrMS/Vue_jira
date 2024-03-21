@@ -42,7 +42,7 @@ export const store = createStore({
       return jwt;
     },
     logoutJwt({ commit }) {
-      this.api.logout();
+      api.logout();
 
       commit('changeJwt', '');
     },

@@ -13,6 +13,7 @@ class Api {
     });
 
     localStorage.setItem('jwt', data.jwt);
+    localStorage.setItem('login', login);
 
     return data;
   }
@@ -23,6 +24,7 @@ class Api {
 
   logout() {
     localStorage.removeItem('jwt');
+    localStorage.removeItem('login');
   }
 
   async connect() {
