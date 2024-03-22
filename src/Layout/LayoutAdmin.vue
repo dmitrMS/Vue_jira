@@ -55,6 +55,20 @@
             }
           },
           {
+            label: 'Команда',
+            icon: 'pi pi-link',
+            command: () => {
+              this.$router.push('/track/account');
+            }
+          },
+          {
+            label: 'Работа команды',
+            icon: 'pi pi-link',
+            command: () => {
+              this.$router.push('/track/account');
+            }
+          },
+          {
             label: 'Выйти',
             icon: 'pi pi-home',
             command: () => {

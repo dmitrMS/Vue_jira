@@ -7,13 +7,9 @@
       <h1>Please sing in</h1>
       <div class="auth">
         <p>login:</p>
-        <FloatLabel>
           <InputText id="username" v-model="login" />
-        </FloatLabel>
         <p>password:</p>
-        <FloatLabel>
           <Password v-model="password" :feedback="false" />
-        </FloatLabel>
       </div>
       <button role="button" @click="getAuthentification">Sign In</button>
       <p>{{ serverMessage }}</p>

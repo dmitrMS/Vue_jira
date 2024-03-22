@@ -37,7 +37,7 @@ export const store = createStore({
     verifyJwt({ commit }) {
       const jwt = api.connect();
 
-      commit('changeJwt', jwt);
+      commit('changeJwt', jwt.id);
 
       return jwt;
     },

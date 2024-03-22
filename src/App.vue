@@ -24,6 +24,10 @@ export default {
     async getAuthentification() {
       try { 
       await this.$store.dispatch('verifyJwt');
+      // if(jwt.role=='employer') {
+      //   this.$router.push({ path: '/track' });
+      // }
+
       this.$router.push({ path: '/track' });
 
     } catch (err) {

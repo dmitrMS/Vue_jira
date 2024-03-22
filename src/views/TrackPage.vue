@@ -1,7 +1,8 @@
 <template>
   <div class="all-body">
     <div id="components-demo">
-      <auth-layout />
+      <auth-layout v-if="role == 'user'"/>
+      <admin-layout v-else />
     </div>
     <p class="timer">{{ workTime }}</p>
     <div class="track-body">
@@ -70,7 +71,8 @@ export default {
       nowWork: false,
       date: null,
       works: [],
-      username: localStorage.getItem('login')
+      username: localStorage.getItem('login'),
+      role: localStorage.getItem('role')
     };
   },
   name: 'TrackPage',
@@ -78,6 +80,7 @@ export default {
     async ShowWorkTime() {
       // console.log(localStorage.getItem('login'));
       // console.log(this.username);
+      console.log(this.role);
       const config = {
         headers: {
           'Content-Type': 'application/json',
