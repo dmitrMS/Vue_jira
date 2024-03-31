@@ -35,6 +35,7 @@
 export default {
   data() {
     return {
+      username: localStorage.getItem('login'),
       items: [
         {
           label: 'Обзор',
@@ -47,7 +48,7 @@ export default {
           label: 'Трэкинг',
           icon: 'pi pi-link',
           command: () => {
-            this.$router.push('/sign_up');
+            this.$router.push('/guest/track');
           }
         },
         {

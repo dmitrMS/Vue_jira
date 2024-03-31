@@ -2,8 +2,12 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import signIn from '../views/SignIn.vue';
 import signUp from '../views/SignUp.vue';
 import trackPage from '../views/TrackPage.vue';
+import trackPageNoAuth from '../views/TrackPageNoAuth.vue';
 import accountTracking from '../views/AccountTracking.vue';
 import reviewTracking from '../views/ReviewTracking.vue';
+import teamUpdate from '../views/TeamUpdate.vue';
+import teamUsers from '../views/TeamUsers.vue';
+import accountNotifications from '../views/AccountNotifications.vue';
 
 const routes = [
   {
@@ -22,6 +26,11 @@ const routes = [
     component: trackPage,
   },
   {
+    path: '/guest/track',
+    name: 'trackPageNoAuth',
+    component: trackPageNoAuth,
+  },
+  {
     path: '/track/account',
     name: 'accountTracking',
     component: accountTracking,
@@ -30,6 +39,21 @@ const routes = [
     path: '/track/review',
     name: 'reviewTracking',
     component: reviewTracking,
+  },
+  {
+    path: '/team',
+    name: 'teamUpdate',
+    component: teamUpdate,
+  },
+  {
+    path: '/user_team',
+    name: 'teamUsers',
+    component: teamUsers,
+  },
+  {
+    path: '/notifications',
+    name: 'accountNotifications',
+    component: accountNotifications,
   }
 ];
 

@@ -35,6 +35,8 @@
 export default {
   data() {
     return {
+      username: localStorage.getItem('login'),
+      usernamed: 'XXX_MarkUltraEbar_XXX',
       items: [
         {
           label: 'Обзор',
@@ -58,7 +60,28 @@ export default {
           }
         },
         {
+          label: 'Команда',
+          icon: 'pi pi-link',
+          command: () => {
+            this.$router.push('/team');
+          }
+        },
+        {
+          label: 'Уведомления',
+          icon: 'pi pi-link',
+          command: () => {
+            this.$router.push('/notifications');
+          }
+        },
+        {
           label: 'Выйти',
+          icon: 'pi pi-home',
+          command: () => {
+            this.userLogout();
+          }
+        },
+        {
+          label: `XXX_MarkUltraEbar_XXX`,
           icon: 'pi pi-home',
           command: () => {
             this.userLogout();

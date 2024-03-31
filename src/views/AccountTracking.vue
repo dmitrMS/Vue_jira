@@ -1,7 +1,8 @@
 <template>
   <div class="all-body">
     <div id="components-demo">
-      <auth-layout />
+      <auth-layout v-if="role == 'user'"/>
+      <admin-layout v-else />
       <h2>Статистика</h2>
       <Panel class="info">
         <div class="crud-body">

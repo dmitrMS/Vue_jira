@@ -35,6 +35,7 @@
   export default {
     data() {
       return {
+        username: localStorage.getItem('login'),
         items: [
           {
             label: 'Обзор',
@@ -58,7 +59,7 @@
             label: 'Команда',
             icon: 'pi pi-link',
             command: () => {
-              this.$router.push('/track/account');
+              this.$router.push('/team');
             }
           },
           {
@@ -66,6 +67,13 @@
             icon: 'pi pi-link',
             command: () => {
               this.$router.push('/track/account');
+            }
+          },
+          {
+            label: 'Уведомления',
+            icon: 'pi pi-link',
+            command: () => {
+              this.$router.push('/notifications');
             }
           },
           {

@@ -41,17 +41,16 @@ export class Api {
     console.log(',,,,,,');
     var lastWorks = JSON.parse(localStorage.getItem('works'));
     var c = 0;
-    lastWorks.forEach(()=>{c++;});
-    // for (const element of lastWorks){c=c+1; console.log(element);console.log(c);}
-    if (c == 0) {
+    // lastWorks.forEach(()=>{c++;});
+    // for (const element of lastWorks){c++;};
+    if (lastWorks == null) {
       lastWorks = [];
       work.id = 1;
 
       lastWorks.push(work);
     } else {
-        console.log(lastWorks);
-      console.log(c);
-      work.id = lastWorks[c-1].id + 1;
+      console.log(c - 1);
+      work.id = lastWorks[c - 1].id + 1;
 
       lastWorks.push(work);
     }
@@ -70,11 +69,9 @@ export class Api {
 
   trackStatusGuest() {
     let lastWorks = JSON.parse(localStorage.getItem('works'));
-    // var obj = {};
-    var c = 0;
-    lastWorks.forEach(()=>{c++;});
+    var obj = {};
 
-    return c !== 0
+    return lastWorks.keys(obj).length == 0
       ? Object.prototype.hasOwnProperty.call(lastWorks[lastWorks.lenght - 1], "end_date") == false
         ? lastWorks[lastWorks.lenght - 1]
         : null
@@ -83,14 +80,11 @@ export class Api {
 
   trackRemoveGuest(id) {
     let lastWorks = JSON.parse(localStorage.getItem('works'));
-    const obj=lastWorks.find(item=> item.id === id);
-    const index = lastWorks.indexOf(obj);
-    console.log(lastWorks);
+    let index = lastWorks.indexOf(id);
 
     if (index !== -1) {
       lastWorks.splice(index, 1);
     }
-    console.log(lastWorks);
 
     localStorage.setItem('works', JSON.stringify(lastWorks));
 
@@ -148,6 +142,3 @@ export class Api {
     }
   }
 }
-
-export const api = new Api();
-
