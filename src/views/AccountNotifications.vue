@@ -6,6 +6,7 @@
     </div>
     <div class="track-body">
     </div>
+    <h2>Уведомления</h2>
     <div class="works">
       <Panel v-for="item in notifications" :key="item" style="height: 100px">
         <div class="crud-body">

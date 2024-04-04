@@ -4,16 +4,16 @@
   </div>
   <div class="authbodysignin">
     <div class="txt">
-      <h1>Please sing in</h1>
+      <h1>Авторизация</h1>
       <div class="auth">
-        <p>login:</p>
+        <p>логин:</p>
           <InputText id="username" v-model="login" />
-        <p>password:</p>
+        <p>пароль:</p>
           <Password v-model="password" :feedback="false" />
       </div>
-      <button role="button" @click="getAuthentification">Sign In</button>
+      <button role="button" @click="getAuthentification">Войти</button>
       <p>{{ serverMessage }}</p>
-      <router-link to="/sign_up">I don't have account</router-link>
+      <router-link to="/sign_up">У меня нет аккаунта</router-link>
     </div>
   </div>
   <div class="fon"></div>
@@ -49,7 +49,6 @@ export default {
 <style>
 .authbodysignin {
   background-color: #7ab7f0d7;
-  /* background-position: bottom right; */
   position: absolute;
   width: 100vw;
   height: 100vh;

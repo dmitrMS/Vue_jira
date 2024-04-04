@@ -7,6 +7,7 @@ export const store = createStore({
     login: '',
     password: '',
     team_id: null,
+    team_id_cal: null,
     works: []
   },
   getters: {},
@@ -16,6 +17,9 @@ export const store = createStore({
     },
     changeTeamId(state, payload) {
       state.team_id = payload;
+    },
+    changeTeamIdCal(state, payload) {
+      state.team_id_cal = payload;
     },
     changeLogin(state, payload) {
       state.login = payload;
@@ -51,26 +55,42 @@ export const store = createStore({
       commit('changeJwt', '');
     },
     updateTeamId({ commit }, note) {
-      api.updateTeam();
+      api.updateTeam(note);
 
       commit('changeTeamId', note);
+    },
+    updateTeamIdCal({ commit }, note) {
+      api.updateTeamCal(note);
+
+      commit('changeTeamIdCal', note);
     },
     createWorks({ commit }, note) {
       const work = api.trackStatusGuest();
 
-      if (work==null) {
+      if (work == null) {
         api.trackGuest(note);
 
         commit('changeWorks', note);
       }
     },
-    updateWorks(note) {
+    stopWorks({ commit }, note) {
       const work = api.trackStatusGuest();
 
       if (work) {
-        api.trackUpdateGuest(note);
+        api.trackStopGuest(note);
 
+        commit('changeWorks', note);
       }
+    },
+    updateWorks({ commit }, note) {
+      const data = api.trackUpdateGuest(
+        note.id_work,
+        note.task_name,
+        note.begin_date,
+        note.end_date
+      );
+
+      commit('changeWorks', data);
     },
     statusWorks() {
       return api.trackStatusGuest();
@@ -79,8 +99,7 @@ export const store = createStore({
       return api.trackShowGuest();
     },
     deleteWorks({ commit }, note) {
-      console.log(note);
-      const data=api.trackRemoveGuest(note);
+      const data = api.trackRemoveGuest(note);
 
       commit('changeWorks', data);
     },

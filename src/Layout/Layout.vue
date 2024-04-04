@@ -26,6 +26,12 @@
             <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
           </a>
         </template>
+        <template #end>
+          <div class="exit">
+          <p class="login">{{ this.username }}</p>
+          <Button class="button" @click="this.userLogout" severity="contrast">Выйти</Button>
+          </div>
+        </template>
       </Menubar>
     </div>
   </div>
@@ -36,15 +42,7 @@ export default {
   data() {
     return {
       username: localStorage.getItem('login'),
-      usernamed: 'XXX_MarkUltraEbar_XXX',
       items: [
-        {
-          label: 'Обзор',
-          icon: 'pi pi-palette',
-          command: () => {
-            this.$router.push('/track/review');
-          }
-        },
         {
           label: 'Трэкинг',
           icon: 'pi pi-link',
@@ -72,20 +70,6 @@ export default {
           command: () => {
             this.$router.push('/notifications');
           }
-        },
-        {
-          label: 'Выйти',
-          icon: 'pi pi-home',
-          command: () => {
-            this.userLogout();
-          }
-        },
-        {
-          label: `XXX_MarkUltraEbar_XXX`,
-          icon: 'pi pi-home',
-          command: () => {
-            this.userLogout();
-          }
         }
       ]
     };
@@ -101,9 +85,7 @@ export default {
 
 <style>
 .layout-auth {
-  /* background-position: bottom left; */
   position: right fixed;
-  /* width: 100vw; */
 }
 </style>
 
@@ -114,13 +96,19 @@ html {
 body {
   margin: 0;
 }
-</style>
 
-<!-- <style scoped>
-.card {
-  background-position: bottom right;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
+.exit {
+  margin-right: 20px;
+  font-size: 16pt;
+  display: inline-flex;
 }
-</style> -->
+
+.exit .login{
+  margin-right: 20px;
+}
+
+.exit .button{
+  margin-block: auto;
+  height: 30px;
+}
+</style>

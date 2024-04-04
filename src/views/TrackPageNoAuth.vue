@@ -42,7 +42,7 @@
             />
           </p>
           <Button
-            label="Update"
+            label="Изменить"
             severity="info"
             @click="
               updateWorkTime(
@@ -54,7 +54,7 @@
             "
           />
           <Button
-            label="Delete"
+            label="Удалить"
             severity="danger"
             @click="deleteWorkTime(item.id)"
           />
@@ -65,12 +65,10 @@
 </template>
 
 <script>
-// import { toRaw } from 'vue';
-
 export default {
   data() {
     return {
-      workAppText: 'Start',
+      workAppText: 'Начать',
       workTime: '00:00',
       workName: '',
       time: { seconds: 0, minutes: 0, hours: 0 },
@@ -85,84 +83,18 @@ export default {
   methods: {
     async ShowWorkTime() {
       this.works = await this.$store.dispatch('showWorks');
-      // const config = {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'x-auth-key': localStorage.getItem('jwt')
-      //   }
-      // };
-      // this.works = toRaw(
-      //   await this.axios.get(
-      //     process.env.VUE_APP_URL + '/track/list',
-      //     {},
-      //     config
-      //   )
-      // );
-      // this.works = this.works.data;
-      // console.log(toRaw(this.works));
     },
     async deleteWorkTime(id_work) {
-      // const config = {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'x-auth-key': localStorage.getItem('jwt')
-      //   }
-      // };
-
-      // this.works = toRaw(
-      //   await this.axios.post(
-      //     process.env.VUE_APP_URL + '/track/delete',
-      //     { id_work: id_work },
-      //     config
-      //   )
-      // );
       await this.$store.dispatch('deleteWorks', id_work);
 
       this.ShowWorkTime();
-
-      // console.log(toRaw(this.works));
     },
-    // async updateWorkTime(id_work, task_name, begin_date, end_date) {
-    //   //token,task_name,begin_time, end_time
-    //   // console.log(id_work, task_name, begin_date, end_date);
-    //   // const config = {
-    //   //   headers: {
-    //   //     'Content-Type': 'application/json',
-    //   //     'x-auth-key': localStorage.getItem('jwt')
-    //   //   }
-    //   // };
+    async updateWorkTime(id_work, task_name, begin_date, end_date) {
+      await this.$store.dispatch('updateWorks', {id_work: id_work, task_name: task_name, begin_date: begin_date, end_date: end_date});
 
-    //   // this.works = toRaw(
-    //   //   await this.axios.post(
-    //   //     process.env.VUE_APP_URL + '/track/update',
-    //   //     {
-    //   //       id_work: id_work,
-    //   //       task_name: task_name,
-    //   //       begin_date: begin_date,
-    //   //       end_date: end_date
-    //   //     },
-    //   //     config
-    //   //   )
-    //   // );
-    //   await this.$store.dispatch('deleteWorks', id_work);
-
-    //   this.ShowWorkTime();
-
-    //   // console.log(toRaw(this.works));
-    // },
+      this.ShowWorkTime();
+    },
     async trackingWorkTime(task_name) {
-      // const config = {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'x-auth-key': localStorage.getItem('jwt')
-      //   }
-      // };
-      // const { data } = await this.axios.post(
-      //   process.env.VUE_APP_URL + '/track/status',
-      //   {},
-      //   config
-      // );
-
       let data = await this.$store.dispatch('statusWorks');
 
       if (data == null) {
@@ -172,44 +104,20 @@ export default {
         };
 
         await this.$store.dispatch('createWorks', work);
-        console.log(JSON.parse(localStorage.getItem('works')));
 
-
-        this.workAppText = 'Stop';
+        this.workAppText = 'Закончить';
         this.nowWork = true;
 
       } else {
         data.end_date = new Date();
-        await this.$store.dispatch('updateWorks', data);
+        await this.$store.dispatch('stopWorks', data);
 
-        this.workAppText = 'Start';
+        this.workAppText = 'Начать';
         this.nowWork = false;
         this.time.minutes = 0;
         this.time.hours = 0;
         this.time.seconds = 0;
       }
-      // if ((await data) == null) {
-      //   await this.axios.post(
-      //     process.env.VUE_APP_URL + '/track/start',
-      //     { task_name: task_name },
-      //     config
-      //   );
-
-      //   this.workAppText = 'Stop';
-      //   this.nowWork = true;
-      // } else {
-      //   await this.axios.post(
-      //     process.env.VUE_APP_URL + '/track/stop',
-      //     {},
-      //     config
-      //   );
-
-      //   this.workAppText = 'Start';
-      //   this.nowWork = false;
-      //   this.time.minutes = 0;
-      //   this.time.hours = 0;
-      //   this.time.seconds = 0;
-      // }
 
       this.ShowWorkTime();
     },
@@ -217,11 +125,11 @@ export default {
       const data = await this.$store.dispatch('statusWorks');
 
       if (data == null) {
-        this.workAppText = 'Start';
+        this.workAppText = 'Начать';
       } else {
         const nowDate = new Date();
 
-        this.workAppText = 'Stop';
+        this.workAppText = 'Закончить';
         this.nowWork = true;
         this.time.seconds = Math.floor(
           (nowDate - Date.parse(data.begin_date)) / 1000
@@ -279,5 +187,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

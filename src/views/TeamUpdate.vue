@@ -4,6 +4,7 @@
       <auth-layout v-if="role == 'user'" />
       <admin-layout v-else />
     </div>
+    <h2>Список команд</h2>
     <div class="track-body">
       <input type="text" v-model="teamName" />
       <button @click="createTeam(this.teamName)">Создать</button>
@@ -101,7 +102,6 @@ export default {
     },
     async infoTeam(team_id) {
       await this.$store.dispatch('updateTeamId', team_id);
-
       this.$router.push('/user_team');
     },
     async createTeam(name) {
@@ -126,5 +126,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

@@ -25,7 +25,6 @@ export default {
     return {
       workDay: 0,
       username: localStorage.getItem('login'),
-      // workWeek: 0,
       workMonth: 0
     };
   },

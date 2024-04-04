@@ -23,18 +23,18 @@ export default {
     return {
       events: [],
       navigatorConfig: {
-        showMonths: 3,
-        skipMonths: 3,
+        showMonths: 2,
+        skipMonths: 2,
         selectMode: 'Week',
-        startDate: '2024-03-21',
-        selectionDay: '2024-03-19',
+        startDate: '2024-04-01',
+        selectionDay: '2024-04-04',
         onTimeRangeSelected: (args) => {
           this.config.startDate = args.day;
         }
       },
       config: {
         viewType: 'Week',
-        startDate: '2024-03-19',
+        startDate: '2024-04-01',
         durationBarVisible: false,
         timeRangeSelectedHandling: 'Enabled',
         onTimeRangeSelected: async (args) => {
@@ -70,7 +70,6 @@ export default {
     DayPilotNavigator
   },
   computed: {
-    // DayPilot.Calendar object - https://api.daypilot.org/daypilot-calendar-class/
     calendar() {
       //   try {
       return this.$refs.calendar.control;

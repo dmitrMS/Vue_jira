@@ -1,13 +1,36 @@
 <template>
   <div class="all-body">
     <div id="components-demo">
-      <auth-layout v-if="role == 'user'"/>
+      <auth-layout v-if="role == 'user'" />
       <admin-layout v-else />
     </div>
     <p class="timer">{{ workTime }}</p>
     <div class="track-body">
-      <input type="text" v-model="workName" />
-      <button @click="trackingWorkTime(this.workName)">{{ workAppText }}</button>
+      <select
+        v-model="selectedTeam"
+        @click="this.selectTeam()"
+        class="dropdown"
+      >
+        <option>Без команды</option>
+        <option v-for="item in teams" :key="item">{{ item.name }}</option>
+      </select>
+      <input
+        v-if="selectedTeam == 'Без команды'"
+        type="text"
+        placeholder="Назовите задание"
+        v-model="workName"
+      />
+      <select
+        v-else
+        v-model="selectedTask"
+        @click="this.selectTask()"
+        class="dropdown"
+      >
+        <option v-for="item in tasks" :key="item">{{ item.name }}</option>
+      </select>
+      <button @click="trackingWorkTime(this.workName)">
+        {{ workAppText }}
+      </button>
     </div>
     <div class="works">
       <Panel v-for="item in works" :key="item" style="height: 100px">
@@ -41,14 +64,20 @@
             />
           </p>
           <Button
-            label="Update"
+            label="Изменить"
+            v-if="item.task_id == null"
             severity="info"
             @click="
-              updateWorkTime(item.id,item.task_name, item.begin_date, item.end_date)
+              updateWorkTime(
+                item.id,
+                item.task_name,
+                item.begin_date,
+                item.end_date
+              )
             "
           />
           <Button
-            label="Delete"
+            label="Удалить"
             severity="danger"
             @click="deleteWorkTime(item.id)"
           />
@@ -64,20 +93,26 @@ import { toRaw } from 'vue';
 export default {
   data() {
     return {
-      workAppText: 'Start',
+      selectedTeam: 'Без команды',
+      selectedTeamObj: {},
+      selectedTask: 'Выберете задание',
+      selectedTaskObj: {},
+      workAppText: 'Начать',
       workTime: '00:00',
       workName: '',
       time: { seconds: 0, minutes: 0, hours: 0 },
       nowWork: false,
       date: null,
       works: [],
+      teams: [],
+      tasks: [],
       username: localStorage.getItem('login'),
       role: localStorage.getItem('role')
     };
   },
   name: 'TrackPage',
   methods: {
-    async ShowWorkTime() {
+    async showWorkTime() {
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -85,17 +120,86 @@ export default {
         }
       };
 
-      this.works = toRaw(
-        await this.axios.get(
-          process.env.VUE_APP_URL + '/track/list',
-          {},
-          config
-        )
-      );
+      if (this.selectedTeam == 'Без команды') {
+        this.works = toRaw(
+          await this.axios.post(
+            process.env.VUE_APP_URL + '/track/list',
+            {},
+            config
+          )
+        );
+      } else {
+        this.works = toRaw(
+          await this.axios.post(
+            process.env.VUE_APP_URL + '/track/list',
+            { team_id: toRaw(this.selectedTeamObj).id },
+            config
+          )
+        );
+      }
 
       this.works = this.works.data;
+    },
+    async showTeam() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
 
-      console.log(toRaw(this.works));
+      this.teams = await this.axios.post(
+        process.env.VUE_APP_URL + '/team/list',
+        {},
+        config
+      );
+
+      this.teams = toRaw(this.teams);
+
+      this.teams = this.teams.data;
+
+      this.showTasks();
+    },
+    async selectTeam() {
+      if (this.selectedTeam !== 'Без команды') {
+        this.selectedTeamObj = this.teams.find(
+          (item) => item.name == this.selectedTeam
+        );
+      }
+
+      await this.showTasks();
+      if (this.tasks.length !== 0) {
+        this.selectedTask = toRaw(this.tasks[0]).name;
+        await this.selectTask();
+      }
+      this.showWorkTime();
+    },
+    async selectTask() {
+      if (this.selectedTeam !== 'Без команды' && this.tasks.length !== 0) {
+        this.selectedTaskObj = this.tasks.find(
+          (item) => item.name == this.selectedTask
+        );
+      }
+
+      this.showTasks();
+    },
+    async showTasks() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      this.tasks = await this.axios.post(
+        process.env.VUE_APP_URL + '/task/list',
+        { team_id: toRaw(this.selectedTeamObj).id },
+        config
+      );
+
+      this.tasks = toRaw(this.tasks);
+
+      this.tasks = this.tasks.data;
     },
     async deleteWorkTime(id_work) {
       const config = {
@@ -113,13 +217,9 @@ export default {
         )
       );
 
-      this.ShowWorkTime();
-
-      // console.log(toRaw(this.works));
+      this.showWorkTime();
     },
-    async updateWorkTime(id_work,task_name, begin_date, end_date) {
-      //token,task_name,begin_time, end_time
-      console.log(id_work,task_name, begin_date, end_date);
+    async updateWorkTime(id_work, task_name, begin_date, end_date) {
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -130,14 +230,17 @@ export default {
       this.works = toRaw(
         await this.axios.post(
           process.env.VUE_APP_URL + '/track/update',
-          { id_work:id_work,task_name: task_name, begin_date: begin_date, end_date: end_date },
+          {
+            id_work: id_work,
+            task_name: task_name,
+            begin_date: begin_date,
+            end_date: end_date
+          },
           config
         )
       );
 
-      this.ShowWorkTime();
-
-      // console.log(toRaw(this.works));
+      this.showWorkTime();
     },
     async trackingWorkTime(task_name) {
       const config = {
@@ -153,14 +256,28 @@ export default {
       );
 
       if ((await data) == null) {
-        await this.axios.post(
-          process.env.VUE_APP_URL + '/track/start',
-          { task_name: task_name },
-          config
-        );
+        if (this.selectedTeam == 'Без команды') {
+          await this.axios.post(
+            process.env.VUE_APP_URL + '/track/start',
+            { task_name: task_name },
+            config
+          );
 
-        this.workAppText = 'Stop';
-        this.nowWork = true;
+          this.workAppText = 'Закончить';
+          this.nowWork = true;
+        } else if (this.tasks.length !== 0) {
+          await this.axios.post(
+            process.env.VUE_APP_URL + '/track/start',
+            {
+              task_name: toRaw(this.selectedTaskObj).name,
+              task_id: toRaw(this.selectedTaskObj).id
+            },
+            config
+          );
+
+          this.workAppText = 'Закончить';
+          this.nowWork = true;
+        }
       } else {
         await this.axios.post(
           process.env.VUE_APP_URL + '/track/stop',
@@ -168,14 +285,14 @@ export default {
           config
         );
 
-        this.workAppText = 'Start';
+        this.workAppText = 'Начать';
         this.nowWork = false;
         this.time.minutes = 0;
         this.time.hours = 0;
         this.time.seconds = 0;
       }
 
-      this.ShowWorkTime();
+      this.showWorkTime();
     },
     async beginInterface() {
       const config = {
@@ -241,14 +358,12 @@ export default {
           this.workTime = '00:00';
         }
       }, 1000);
-    },
-    viewDate() {
-      console.log(this.date);
     }
   },
   mounted() {
     this.beginInterface();
-    this.ShowWorkTime();
+    this.showWorkTime();
+    this.showTeam();
     this.timer();
   }
 };
@@ -266,9 +381,12 @@ export default {
 .track-body {
   margin: 0 0;
   font-style: italic;
-  line-height: 5;
   display: inline-flex;
-  /* transform: translate(10%, 170%); */
+}
+
+.track-body .dropdown {
+  height: 40px;
+  margin-right: 20px;
 }
 
 .track-body input {

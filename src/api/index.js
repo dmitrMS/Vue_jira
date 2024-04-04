@@ -38,45 +38,56 @@ export class Api {
   }
 
   trackGuest(work) {
-    console.log(',,,,,,');
-    var lastWorks = JSON.parse(localStorage.getItem('works'));
-    var c = 0;
-    lastWorks.forEach(()=>{c++;});
-    // for (const element of lastWorks){c=c+1; console.log(element);console.log(c);}
-    if (c == 0) {
+    let lastWorks = JSON.parse(localStorage.getItem('works'));
+    let countWork = 0;
+
+    lastWorks.forEach(()=>{countWork++;});
+
+    if (countWork == 0) {
       lastWorks = [];
       work.id = 1;
 
       lastWorks.push(work);
     } else {
-        console.log(lastWorks);
-      console.log(c);
-      work.id = lastWorks[c-1].id + 1;
+      work.id = lastWorks[countWork-1].id + 1;
 
       lastWorks.push(work);
     }
 
-    console.log(lastWorks);
     localStorage.setItem('works', JSON.stringify(lastWorks));
-    console.log(JSON.parse(localStorage.getItem('works')));
   }
 
-  trackUpdateGuest(work) {
+  trackStopGuest(work) {
     let lastWorks = JSON.parse(localStorage.getItem('works'));
+    var countWork = 0;
 
-    lastWorks[lastWorks.lenght - 1] = work;
+    lastWorks.forEach(()=>{countWork++;});
+    lastWorks[countWork - 1] = work;
+
+    localStorage.setItem('works', JSON.stringify(lastWorks));
+  }
+
+  trackUpdateGuest(id,task_name,begin_date,end_date) {
+    let lastWorks = JSON.parse(localStorage.getItem('works'));
+    const obj=lastWorks.find(item=> item.id === id);
+    const index = lastWorks.indexOf(obj);
+
+    lastWorks[index].task_name=task_name;
+    lastWorks[index].begin_date=begin_date;
+    lastWorks[index].end_date=end_date;
+
     localStorage.setItem('works', JSON.stringify(lastWorks));
   }
 
   trackStatusGuest() {
     let lastWorks = JSON.parse(localStorage.getItem('works'));
-    // var obj = {};
-    var c = 0;
-    lastWorks.forEach(()=>{c++;});
+    var countWork = 0;
 
-    return c !== 0
-      ? Object.prototype.hasOwnProperty.call(lastWorks[lastWorks.lenght - 1], "end_date") == false
-        ? lastWorks[lastWorks.lenght - 1]
+    lastWorks.forEach(()=>{countWork++;});
+
+    return countWork !== 0
+      ? Object.prototype.hasOwnProperty.call(lastWorks[countWork - 1], "end_date") == false
+        ? lastWorks[countWork - 1]
         : null
       : null;
   }
@@ -85,12 +96,10 @@ export class Api {
     let lastWorks = JSON.parse(localStorage.getItem('works'));
     const obj=lastWorks.find(item=> item.id === id);
     const index = lastWorks.indexOf(obj);
-    console.log(lastWorks);
 
     if (index !== -1) {
       lastWorks.splice(index, 1);
     }
-    console.log(lastWorks);
 
     localStorage.setItem('works', JSON.stringify(lastWorks));
 
@@ -102,7 +111,12 @@ export class Api {
   }
 
   updateTeam(team_id) {
-    localStorage.setItem('team', team_id);
+    localStorage.setItem('team_id', team_id);
+    console.log(localStorage.getItem('team_id'));
+  }
+
+  updateTeamCal(team_id_cal) {
+    localStorage.setItem('team_id_cal', team_id_cal);
   }
 
   logout() {

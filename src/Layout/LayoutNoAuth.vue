@@ -26,6 +26,12 @@
             <span v-if="hasSubmenu" class="pi pi-fw pi-angle-down ml-2" />
           </a>
         </template>
+        <template #end>
+          <div class="exit">
+          <p class="login">{{ this.username }}</p>
+          <Button class="button" @click="this.userLogIn">Войти</Button>
+          </div>
+        </template>
       </Menubar>
     </div>
   </div>
@@ -35,51 +41,29 @@
 export default {
   data() {
     return {
-      username: localStorage.getItem('login'),
+      username: 'Гость',
       items: [
-        {
-          label: 'Обзор',
-          icon: 'pi pi-palette',
-          command: () => {
-            this.$router.push('/track/review');
-          }
-        },
         {
           label: 'Трэкинг',
           icon: 'pi pi-link',
           command: () => {
             this.$router.push('/guest/track');
           }
-        },
-        {
-          label: 'Войти',
-          icon: 'pi pi-home',
-          items: [
-            {
-              label: 'Авторизация',
-              command: () => {
-                this.$router.push('/');
-              }
-            },
-            {
-              label: 'Регистрация',
-              command: () => {
-                this.$router.push('/sign_up');
-              }
-            }
-          ]
         }
       ]
     };
+  },
+  methods: {
+    userLogIn() {
+      this.$router.push({ path: '/' });
+    }
   }
 };
 </script>
 
 <style>
 .layout-auth {
-  /* background-position: bottom left; */
   position: right fixed;
-  /* width: 100vw; */
 }
 </style>
 
@@ -87,7 +71,23 @@ export default {
 html {
   margin: 0;
 }
+
 body {
   margin: 0;
+}
+
+.exit {
+  margin-right: 20px;
+  font-size: 16pt;
+  display: inline-flex;
+}
+
+.exit .login{
+  margin-right: 20px;
+}
+
+.exit .button{
+  margin-block: auto;
+  height: 30px;
 }
 </style>

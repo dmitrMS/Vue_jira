@@ -4,13 +4,13 @@
   </div>
   <div class="authbody">
     <div class="txt">
-      <h1>Please sing up</h1>
+      <h1>Регистрация</h1>
       <div class="auth">
-        <p>login:</p>
+        <p>логин:</p>
         <FloatLabel>
           <InputText id="username" v-model="login" />
         </FloatLabel>
-        <p>password:</p>
+        <p>пароль:</p>
         <FloatLabel>
           <Password v-model="password" inputId="password">
             <template #header>
@@ -31,10 +31,10 @@
         </FloatLabel>
       </div>
       <button class="button_auth" @click="getAuthentification" role="link">
-        Sign Up
+        Создать
       </button>
       <br />
-      <router-link to="/">I already have account</router-link>
+      <router-link to="/">У меня уже есть аккаунт</router-link>
     </div>
   </div>
 </template>

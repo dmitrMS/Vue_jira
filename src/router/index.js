@@ -4,9 +4,11 @@ import signUp from '../views/SignUp.vue';
 import trackPage from '../views/TrackPage.vue';
 import trackPageNoAuth from '../views/TrackPageNoAuth.vue';
 import accountTracking from '../views/AccountTracking.vue';
+import accountTrackingTeam from '../views/AccountTrackingTeam.vue';
 import reviewTracking from '../views/ReviewTracking.vue';
 import teamUpdate from '../views/TeamUpdate.vue';
 import teamUsers from '../views/TeamUsers.vue';
+import teamTasks from '../views/TeamTasks.vue';
 import accountNotifications from '../views/AccountNotifications.vue';
 
 const routes = [
@@ -41,6 +43,11 @@ const routes = [
     component: reviewTracking,
   },
   {
+    path: '/track/team',
+    name: 'accountTrackingTeam',
+    component: accountTrackingTeam,
+  },
+  {
     path: '/team',
     name: 'teamUpdate',
     component: teamUpdate,
@@ -54,6 +61,11 @@ const routes = [
     path: '/notifications',
     name: 'accountNotifications',
     component: accountNotifications,
+  },
+  {
+    path: '/team/tasks',
+    name: 'teamTasks',
+    component: teamTasks,
   }
 ];
 

@@ -13,8 +13,6 @@
 </template>
 
 <script>
-// import footer from '@/components/footer.vue';
-
 export default {
   name: 'myApp',
 
@@ -47,8 +45,6 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100vw;
-  /* Высота footer */
   height: 30px;
 }
-
 </style>

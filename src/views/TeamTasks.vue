@@ -6,31 +6,26 @@
         <team-layout/>
       </div>
       <div class="track-body">
-        <input type="text" placeholder="Введите логин пользователя" v-model="userLogin" />
-        <button @click="inviteUser(this.userLogin,this.teamId)">Отправить приглашение</button>
+        <input type="text" placeholder="Название задания" v-model="nameTask" />
+        <button @click="createTask(this.nameTask)">Создать</button>
+      </div>
       <div class="works">
-        <Panel v-for="item in teamUsers" :key="item" style="height: 100px">
+        <Panel v-for="item in teamTasks" :key="item" style="height: 100px">
           <div class="crud-body">
             <p class="m-0">
-              Номер:
+              Название:
               <InputText
                 type="text"
                 class="crud"
-                placeholder="номер"
-                v-model="this.username"
+                placeholder="Название"
+                v-model="item.name"
               />
-              Логин:
+              Команда:
               <InputText
                 type="text"
                 class="crud"
-                placeholder="логин"
-                v-model="item.login"
-              />
-              Роль:<InputText
-                type="text"
-                class="crud"
-                placeholder="роль"
-                v-model="item.role"
+                placeholder="Команда"
+                v-model="item.team_id"
               />
               Колличество работ:<InputText
                 type="text"
@@ -42,7 +37,7 @@
             <Button
               label="Удалить"
               severity="danger"
-              @click="deleteUserTeam(item.user_id,item.team_id)"
+              @click="deleteTask(item.id)"
             />
           </div>
         </Panel>
@@ -53,7 +48,6 @@
         </Dialog>
       </div>
     </div>
-  </div>
   </template>
   
   <script>
@@ -62,18 +56,18 @@
   export default {
     data() {
       return {
-        userLogin: '',
+        nameTask: '',
         nowWork: false,
         visible: false,
         teamId: localStorage.getItem('team_id'),
-        teamUsers: [],
+        teamTasks: [],
         username: localStorage.getItem('login'),
         role: localStorage.getItem('role')
       };
     },
     name: 'UserTeamPage',
     methods: {
-      async ShowUserTeam() {
+      async showTask() {
         const config = {
           headers: {
             'Content-Type': 'application/json',
@@ -81,19 +75,17 @@
           }
         };
   
-        this.teamUsers = toRaw(
+        this.teamTasks = toRaw(
           await this.axios.post(
-            process.env.VUE_APP_URL + '/user_team/list',
+            process.env.VUE_APP_URL + '/task/list',
             {team_id: Number(this.teamId)},
             config
           )
         );
   
-        this.teamUsers = this.teamUsers.data;
-        console.log(this.teamUsers);
+        this.teamTasks = this.teamTasks.data;
       },
-      async deleteUserTeam(user_id,team_id) {
-      console.log(user_id,team_id);
+      async deleteTask(task_id) {
         const config = {
           headers: {
             'Content-Type': 'application/json',
@@ -102,23 +94,24 @@
         };
   
         await this.axios.post(
-          process.env.VUE_APP_URL + '/user_team/delete',
-          { user_id:user_id,team_id: team_id },
+          process.env.VUE_APP_URL + '/task/delete',
+          { task_id: task_id },
           config
         );
   
-        this.ShowUserTeam();
+        this.showTask();
       },
-      async inviteUser(login,team_id) {
+      async createTask(name) {
         const config = {
           headers: {
             'Content-Type': 'application/json',
             'x-auth-key': localStorage.getItem('jwt')
           }
         };
+
         await this.axios.post(
-          process.env.VUE_APP_URL + '/team/add_user',
-          { login: login, team_id: team_id},
+          process.env.VUE_APP_URL + '/task/create',
+          { name:name,team_id: Number(this.teamId)},
           config
         );
 
@@ -126,7 +119,7 @@
       },
     },
     mounted() {
-      this.ShowUserTeam();
+      this.showTask();
     }
   };
   </script>
