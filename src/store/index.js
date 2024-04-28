@@ -7,6 +7,7 @@ export const store = createStore({
     login: '',
     password: '',
     team_id: null,
+    team_name: null,
     team_id_cal: null,
     works: []
   },
@@ -17,6 +18,9 @@ export const store = createStore({
     },
     changeTeamId(state, payload) {
       state.team_id = payload;
+    },
+    changeTeamName(state, payload) {
+      state.team_name = payload;
     },
     changeTeamIdCal(state, payload) {
       state.team_id_cal = payload;
@@ -55,9 +59,12 @@ export const store = createStore({
       commit('changeJwt', '');
     },
     updateTeamId({ commit }, note) {
-      api.updateTeam(note);
 
-      commit('changeTeamId', note);
+      console.log(note.team_id);
+      api.updateTeam(note.team_id,note.team_name);
+
+      commit('changeTeamId', note.team_id);
+      commit('changeTeamName', note.team_name);
     },
     updateTeamIdCal({ commit }, note) {
       api.updateTeamCal(note);

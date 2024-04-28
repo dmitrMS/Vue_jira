@@ -1,10 +1,10 @@
 # broke normal building, because of low power vm at hosting
-FROM node:18.18.2-alpine as builder
+FROM node:20.5.0-alpine as builder
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm i
+COPY package*.json ../
+RUN npm ci
 
 COPY . /app
 RUN npm run build

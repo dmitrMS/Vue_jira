@@ -25,13 +25,13 @@
                 type="text"
                 class="crud"
                 placeholder="Команда"
-                v-model="item.team_id"
+                v-model="this.teamName"
               />
               Колличество работ:<InputText
                 type="text"
                 class="crud"
                 placeholder="работы"
-                v-model="item.numTeamWorks"
+                v-model="item.numTaskWorks"
               />
             </p>
             <Button
@@ -57,6 +57,7 @@
     data() {
       return {
         nameTask: '',
+        teamName: localStorage.getItem('team_name'),
         nowWork: false,
         visible: false,
         teamId: localStorage.getItem('team_id'),
@@ -83,7 +84,23 @@
           )
         );
   
+        console.log(this.teamTasks);
         this.teamTasks = this.teamTasks.data;
+
+        let numTaskWorks;
+        
+        for(let element of this.teamTasks)
+        {
+        numTaskWorks = toRaw(
+          await this.axios.post(
+            process.env.VUE_APP_URL + '/task/track/list',
+            {task_id: Number(element.id)},
+            config
+          )
+        );
+
+        element.numTaskWorks=numTaskWorks.data.length;
+        }
       },
       async deleteTask(task_id) {
         const config = {
@@ -116,6 +133,7 @@
         );
 
         this.visible=true;
+        this.showTask();
       },
     },
     mounted() {

@@ -78,7 +78,7 @@ export default {
   computed: {
     calendar() {
       // try {
-        return this.$refs.calendar.control;
+      return this.$refs.calendar.control;
       // } catch (err) {
       //   console.log(err);
       // }
@@ -101,21 +101,37 @@ export default {
         )
       );
 
+      const teamName = toRaw(
+        await this.axios.post(
+          process.env.VUE_APP_URL + '/team/info',
+          { team_id: Number(this.teamId) },
+          config
+        )
+      );
+
       works = works.data;
 
       const events = [];
 
-      works.forEach((element) => {
+      for (let element of works) {
+        let userName = toRaw(
+          await this.axios.post(
+            process.env.VUE_APP_URL + '/admin/data',
+            { admin_id: Number(element.user_id) },
+            config
+          )
+        );
+
         const item = {
           id: element.id,
           start: element.begin_date,
           end: element.end_date,
-          text: `Задание:${element.task_name} \n Пользователь:${element.user_id} \n Команда:${element.team_id}`,
+          text: `Задание:${element.task_name} \n Пользователь:${userName.data.login} \n Команда:${teamName}`,
           backColor: '#0d701ed7',
           borderColor: '#38761d'
         };
         events.push(item);
-      });
+      }
 
       this.calendar.update({ events });
     },
