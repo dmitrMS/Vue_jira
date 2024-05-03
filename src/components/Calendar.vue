@@ -72,11 +72,7 @@ export default {
   },
   computed: {
     calendar() {
-      //   try {
       return this.$refs.calendar.control;
-      //   } catch (err) {
-      //     console.log(err);
-      //   }
     }
   },
   methods: {

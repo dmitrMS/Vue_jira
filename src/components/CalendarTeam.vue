@@ -78,12 +78,7 @@ export default {
   },
   computed: {
     calendar() {
-      // try {
-        // if(this.$refs.calendar.control !== null)
       return this.$refs.calendar.control;
-      // } catch (err) {
-        // console.log(err);
-      // }
     }
   },
   methods: {
