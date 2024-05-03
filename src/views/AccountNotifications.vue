@@ -44,7 +44,7 @@ export default {
   },
   name: 'AccountNotifications',
   methods: {
-    async ShowNotifications() {
+    async ShowNotifications() { // показ уведомлений о приглашении
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export default {
       };
 
       this.notifications = toRaw(
-        await this.axios.post(
+        await this.axios.get(
           process.env.VUE_APP_URL + '/notification/list',
           {},
           config
@@ -62,7 +62,7 @@ export default {
 
       this.notifications = this.notifications.data;
     },
-    async deleteNotification(notification_id) {
+    async deleteNotification(notification_id) { // отклонение приглашения в команду
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -70,15 +70,15 @@ export default {
         }
       };
 
-      await this.axios.post(
-        process.env.VUE_APP_URL + '/notification/delete',
-        { notification_id: notification_id },
+      await this.axios.delete(
+        process.env.VUE_APP_URL + '/notification/delete'+`/${notification_id}`,
+        { },
         config
       );
 
       this.ShowWorkTime();
     },
-    async teamAgree(notification_id,team_id) {
+    async teamAgree(notification_id,team_id) { // принятие приглашения в команду
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ export default {
         }
       };
 
-      await this.axios.post(
+      await this.axios.put(
         process.env.VUE_APP_URL + '/notification/update',
         { notification_id:notification_id,team_id:team_id },
         config

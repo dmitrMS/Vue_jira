@@ -13,6 +13,7 @@
 </template>
 
 <script>
+// footer компонент
 export default {
   name: 'myApp',
 

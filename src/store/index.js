@@ -1,6 +1,8 @@
 import { createStore } from 'vuex';
 import { api } from '../api/index.js';
 
+// создание session storage
+
 export const store = createStore({
   state: {
     jwt: '',
@@ -13,6 +15,7 @@ export const store = createStore({
   },
   getters: {},
   mutations: {
+    // изменение параметров в session storage
     changeJwt(state, payload) {
       state.jwt = payload;
     },
@@ -35,7 +38,8 @@ export const store = createStore({
       state.works.push(payload);
     }
   },
-  actions: {
+  actions: { 
+    // комбинированные действия с  параметрами в session storage
     updateJwt({ commit }, note) {
       commit('changeJwt', note);
     },

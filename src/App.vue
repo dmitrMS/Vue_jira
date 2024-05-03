@@ -26,6 +26,7 @@ export default {
   },
   methods: {
     async getAuthentification() {
+      // начальная проверка на открытую учётную запись
       try {
         await this.$store.dispatch('verifyJwt');
 

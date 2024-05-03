@@ -1,15 +1,15 @@
 <template>
   <div id="components-demo">
-    <no-auth-layout/>
+    <no-auth-layout />
   </div>
   <div class="authbodysignin">
     <div class="txt">
       <h1>Авторизация</h1>
       <div class="auth">
         <p>логин:</p>
-          <InputText id="username" v-model="login" />
+        <InputText id="username" v-model="login" />
         <p>пароль:</p>
-          <Password v-model="password" :feedback="false" />
+        <Password v-model="password" :feedback="false" />
       </div>
       <button role="button" @click="getAuthentification">Войти</button>
       <p>{{ serverMessage }}</p>
@@ -31,6 +31,7 @@ export default {
   },
   methods: {
     async getAuthentification() {
+      // вход в учётную запись, получение jwt токена
       const config = {
         login: this.login,
         password: this.password,
@@ -63,9 +64,8 @@ export default {
   opacity: 100%;
 }
 
-.authbodysignin .auth input:focus 
-{
-  outline:none;
+.authbodysignin .auth input:focus {
+  outline: none;
 }
 
 .authbodysignin a {

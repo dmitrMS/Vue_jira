@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 export class Api {
-  constructor() { }
+  constructor() {}
 
   async signIn(login, password, path) {
+    // создание запроса на авторизацию, заполнение параметров local storage, сохранение jwt токена
     const { data } = await axios.post(process.env.VUE_APP_URL + path, {
       login: login,
       password: password,
@@ -33,15 +34,19 @@ export class Api {
   }
 
   update(value) {
+    // обновление информации о пользователе в local storage
     localStorage.setItem('jwt', value.jwt);
     localStorage.setItem('role', value.role);
   }
 
   trackGuest(work) {
+    // начать рабочее время для гостя в local storage
     let lastWorks = JSON.parse(localStorage.getItem('works'));
     let countWork = 0;
 
-    lastWorks.forEach(()=>{countWork++;});
+    lastWorks.forEach(() => {
+      countWork++;
+    });
 
     if (countWork == 0) {
       lastWorks = [];
@@ -49,7 +54,7 @@ export class Api {
 
       lastWorks.push(work);
     } else {
-      work.id = lastWorks[countWork-1].id + 1;
+      work.id = lastWorks[countWork - 1].id + 1;
 
       lastWorks.push(work);
     }
@@ -58,43 +63,54 @@ export class Api {
   }
 
   trackStopGuest(work) {
+    // закончить рабочее время гостя в local storage
     let lastWorks = JSON.parse(localStorage.getItem('works'));
     var countWork = 0;
 
-    lastWorks.forEach(()=>{countWork++;});
+    lastWorks.forEach(() => {
+      countWork++;
+    });
     lastWorks[countWork - 1] = work;
 
     localStorage.setItem('works', JSON.stringify(lastWorks));
   }
 
-  trackUpdateGuest(id,task_name,begin_date,end_date) {
+  trackUpdateGuest(id, task_name, begin_date, end_date) {
+    // обновление рабочего времени для гостя в local storage
     let lastWorks = JSON.parse(localStorage.getItem('works'));
-    const obj=lastWorks.find(item=> item.id === id);
+    const obj = lastWorks.find((item) => item.id === id);
     const index = lastWorks.indexOf(obj);
 
-    lastWorks[index].task_name=task_name;
-    lastWorks[index].begin_date=begin_date;
-    lastWorks[index].end_date=end_date;
+    lastWorks[index].task_name = task_name;
+    lastWorks[index].begin_date = begin_date;
+    lastWorks[index].end_date = end_date;
 
     localStorage.setItem('works', JSON.stringify(lastWorks));
   }
 
   trackStatusGuest() {
+    // проверкка существующего рабочего времени для гостя в local storage
     let lastWorks = JSON.parse(localStorage.getItem('works'));
     var countWork = 0;
 
-    lastWorks.forEach(()=>{countWork++;});
+    lastWorks.forEach(() => {
+      countWork++;
+    });
 
     return countWork !== 0
-      ? Object.prototype.hasOwnProperty.call(lastWorks[countWork - 1], "end_date") == false
+      ? Object.prototype.hasOwnProperty.call(
+          lastWorks[countWork - 1],
+          'end_date'
+        ) == false
         ? lastWorks[countWork - 1]
         : null
       : null;
   }
 
   trackRemoveGuest(id) {
+    // удаление рабочего времени гостя в local storage
     let lastWorks = JSON.parse(localStorage.getItem('works'));
-    const obj=lastWorks.find(item=> item.id === id);
+    const obj = lastWorks.find((item) => item.id === id);
     const index = lastWorks.indexOf(obj);
 
     if (index !== -1) {
@@ -107,10 +123,11 @@ export class Api {
   }
 
   trackShowGuest() {
+    // показ рабочего времени гостя
     return JSON.parse(localStorage.getItem('works'));
   }
 
-  updateTeam(team_id,team_name) {
+  updateTeam(team_id, team_name) {
     localStorage.setItem('team_id', team_id);
     localStorage.setItem('team_name', team_name);
   }
@@ -126,6 +143,7 @@ export class Api {
   }
 
   async connect() {
+    // проверка открытой учётной записи
     try {
       const config = {
         headers: {
@@ -164,4 +182,3 @@ export class Api {
 }
 
 export const api = new Api();
-

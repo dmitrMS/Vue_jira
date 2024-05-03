@@ -24,6 +24,7 @@ import 'primevue/resources/themes/aura-light-green/theme.css';
 
 const app = createApp(App);
 
+// поключение компонентов
 app.component('auth-layout', mainLayout);
 app.component('no-auth-layout', NoAuthLayout);
 app.component('footer-layout', FooterLayout);
@@ -40,9 +41,11 @@ app.component('Panel', Panel);
 app.component('Button', Button);
 app.component('Dropdown', Dropdown);
 
+// подлючение библиотек для использования во всех vue компонентах без import
 app.use(PrimeVue);
 app.use(router);
 app.use(vueAxios, axios);
 app.use(store);
 
+// мотирование приложения
 app.mount('#app');

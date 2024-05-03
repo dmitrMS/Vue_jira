@@ -113,6 +113,7 @@ export default {
   name: 'TrackPage',
   methods: {
     async showWorkTime() {
+      // показ рабочего времени пользователя в одиночку, при выборе команды- в этой команде
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +123,7 @@ export default {
 
       if (this.selectedTeam == 'Без команды') {
         this.works = toRaw(
-          await this.axios.post(
+          await this.axios.get(
             process.env.VUE_APP_URL + '/track/list',
             {},
             config
@@ -130,7 +131,7 @@ export default {
         );
       } else {
         this.works = toRaw(
-          await this.axios.post(
+          await this.axios.get(
             process.env.VUE_APP_URL + '/track/list',
             { team_id: toRaw(this.selectedTeamObj).id },
             config
@@ -141,6 +142,7 @@ export default {
       this.works = this.works.data;
     },
     async showTeam() {
+      // показ списка команд
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -148,7 +150,7 @@ export default {
         }
       };
 
-      this.teams = await this.axios.post(
+      this.teams = await this.axios.get(
         process.env.VUE_APP_URL + '/team/list',
         {},
         config
@@ -161,6 +163,7 @@ export default {
       this.showTasks();
     },
     async selectTeam() {
+      // выбор команды
       if (this.selectedTeam !== 'Без команды') {
         this.selectedTeamObj = this.teams.find(
           (item) => item.name == this.selectedTeam
@@ -168,13 +171,18 @@ export default {
       }
 
       await this.showTasks();
-      if (this.tasks.length !== 0) {
-        this.selectedTask = toRaw(this.tasks[0]).name;
-        await this.selectTask();
+      try {
+        if (this.tasks.length !== 0) {
+          this.selectedTask = toRaw(this.tasks[0]).name;
+          await this.selectTask();
+        }
+        this.showWorkTime();
+      } catch (err) {
+        this.showWorkTime();
       }
-      this.showWorkTime();
     },
     async selectTask() {
+      // выбор командного задания для трэкинга
       if (this.selectedTeam !== 'Без команды' && this.tasks.length !== 0) {
         this.selectedTaskObj = this.tasks.find(
           (item) => item.name == this.selectedTask
@@ -184,6 +192,7 @@ export default {
       this.showTasks();
     },
     async showTasks() {
+      // показ командных заданий
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +200,7 @@ export default {
         }
       };
 
-      this.tasks = await this.axios.post(
+      this.tasks = await this.axios.get(
         process.env.VUE_APP_URL + '/task/list',
         { team_id: toRaw(this.selectedTeamObj).id },
         config
@@ -202,6 +211,7 @@ export default {
       this.tasks = this.tasks.data;
     },
     async deleteWorkTime(id_work) {
+      // удаление записи о рабочем времени
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -210,9 +220,9 @@ export default {
       };
 
       this.works = toRaw(
-        await this.axios.post(
-          process.env.VUE_APP_URL + '/track/delete',
-          { id_work: id_work },
+        await this.axios.delete(
+          process.env.VUE_APP_URL + '/track/delete'+`/${id_work}`,
+          {},
           config
         )
       );
@@ -220,6 +230,7 @@ export default {
       this.showWorkTime();
     },
     async updateWorkTime(id_work, task_name, begin_date, end_date) {
+      // обновление одиночного рабочего времени
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +239,7 @@ export default {
       };
 
       this.works = toRaw(
-        await this.axios.post(
+        await this.axios.put(
           process.env.VUE_APP_URL + '/track/update',
           {
             id_work: id_work,
@@ -243,13 +254,14 @@ export default {
       this.showWorkTime();
     },
     async trackingWorkTime(task_name) {
+      // запустить начало рабочего времени
       const config = {
         headers: {
           'Content-Type': 'application/json',
           'x-auth-key': localStorage.getItem('jwt')
         }
       };
-      const { data } = await this.axios.post(
+      const { data } = await this.axios.get(
         process.env.VUE_APP_URL + '/track/status',
         {},
         config
@@ -295,13 +307,14 @@ export default {
       this.showWorkTime();
     },
     async beginInterface() {
+      // обновление текущего таймера, поиск действующего рабочего времени
       const config = {
         headers: {
           'Content-Type': 'application/json',
           'x-auth-key': localStorage.getItem('jwt')
         }
       };
-      const { data } = await this.axios.post(
+      const { data } = await this.axios.get(
         process.env.VUE_APP_URL + '/track/status',
         {},
         config
@@ -323,6 +336,7 @@ export default {
       }
     },
     timer() {
+      // создание таймера
       setInterval(() => {
         if (this.nowWork == true) {
           if (this.time.seconds === 60) {

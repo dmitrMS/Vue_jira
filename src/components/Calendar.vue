@@ -26,15 +26,16 @@ export default {
         showMonths: 2,
         skipMonths: 2,
         selectMode: 'Week',
-        startDate: '2024-04-01',
-        selectionDay: '2024-04-04',
+        startDate: '2024-05-01',
+        selectionDay: '2024-05-02',
         onTimeRangeSelected: (args) => {
           this.config.startDate = args.day;
         }
       },
+      // конфигурационные параметры календаря
       config: {
         viewType: 'Week',
-        startDate: '2024-04-01',
+        startDate: '2024-05-01',
         durationBarVisible: false,
         timeRangeSelectedHandling: 'Enabled',
         onTimeRangeSelected: async (args) => {
@@ -80,6 +81,7 @@ export default {
   },
   methods: {
     async loadEvents() {
+      // создание видимости работ на календаре
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -87,7 +89,7 @@ export default {
         }
       };
       let works = toRaw(
-        await this.axios.post(
+        await this.axios.get(
           process.env.VUE_APP_URL + '/track/list',
           { task_id: 1 },
           config

@@ -32,15 +32,16 @@ export default {
         showMonths: 2,
         skipMonths: 2,
         selectMode: 'Week',
-        startDate: '2024-04-01',
-        selectionDay: '2024-04-02',
+        startDate: '2024-05-01',
+        selectionDay: '2024-05-02',
         onTimeRangeSelected: (args) => {
           this.config.startDate = args.day;
         }
       },
+      // конфигурационные параметры календаря
       config: {
         viewType: 'Week',
-        startDate: '2024-04-01',
+        startDate: '2024-05-01',
         durationBarVisible: false,
         timeRangeSelectedHandling: 'Enabled',
         onTimeRangeSelected: async (args) => {
@@ -78,14 +79,15 @@ export default {
   computed: {
     calendar() {
       // try {
+        // if(this.$refs.calendar.control !== null)
       return this.$refs.calendar.control;
       // } catch (err) {
-      //   console.log(err);
+        // console.log(err);
       // }
     }
   },
   methods: {
-    async loadEvents() {
+    async loadEvents() { // создание видимости работ на календаре
       // await this.loadData();
       const config = {
         headers: {
@@ -94,16 +96,8 @@ export default {
         }
       };
       let works = toRaw(
-        await this.axios.post(
+        await this.axios.get(
           process.env.VUE_APP_URL + '/team/track/list',
-          { team_id: Number(this.teamId) },
-          config
-        )
-      );
-
-      const teamName = toRaw(
-        await this.axios.post(
-          process.env.VUE_APP_URL + '/team/info',
           { team_id: Number(this.teamId) },
           config
         )
@@ -115,7 +109,7 @@ export default {
 
       for (let element of works) {
         let userName = toRaw(
-          await this.axios.post(
+          await this.axios.get(
             process.env.VUE_APP_URL + '/admin/data',
             { admin_id: Number(element.user_id) },
             config
@@ -126,7 +120,7 @@ export default {
           id: element.id,
           start: element.begin_date,
           end: element.end_date,
-          text: `Задание:${element.task_name} \n Пользователь:${userName.data.login} \n Команда:${teamName}`,
+          text: `Задание:${element.task_name} \n Пользователь:${userName.data.login}`,
           backColor: '#0d701ed7',
           borderColor: '#38761d'
         };
@@ -135,7 +129,7 @@ export default {
 
       this.calendar.update({ events });
     },
-    async loadData() {
+    async loadData() { // создание строки текущего времени в нужном формате
       const now = new Date();
       const year = now.getFullYear();
       let month = now.getMonth() + 1;
@@ -161,7 +155,7 @@ export default {
       this.selectionDay = `${year}-${month}-${selectionDay}`;
     }
   },
-  mounted() {
+  created() {
     // this.loadData();
     this.loadEvents();
   }

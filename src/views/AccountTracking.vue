@@ -1,7 +1,7 @@
 <template>
   <div class="all-body">
     <div id="components-demo">
-      <auth-layout v-if="role == 'user'"/>
+      <auth-layout v-if="role == 'user'" />
       <admin-layout v-else />
       <h2>Статистика</h2>
       <Panel class="info">
@@ -30,6 +30,7 @@ export default {
   },
   methods: {
     async getStatistics() {
+      // вывод статистики о рабочем времени пользователя за день и месяц
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ export default {
         }
       };
       let works = toRaw(
-        await this.axios.post(
+        await this.axios.get(
           process.env.VUE_APP_URL + '/track/list',
           { task_id: 1 },
           config

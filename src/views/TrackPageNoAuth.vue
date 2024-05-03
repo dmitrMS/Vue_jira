@@ -82,19 +82,28 @@ export default {
   name: 'TrackPageNoAuth',
   methods: {
     async ShowWorkTime() {
+      // показ рабочего времени гостя
       this.works = await this.$store.dispatch('showWorks');
     },
     async deleteWorkTime(id_work) {
+      // удаление рабочего времени гостя
       await this.$store.dispatch('deleteWorks', id_work);
 
       this.ShowWorkTime();
     },
     async updateWorkTime(id_work, task_name, begin_date, end_date) {
-      await this.$store.dispatch('updateWorks', {id_work: id_work, task_name: task_name, begin_date: begin_date, end_date: end_date});
+      // обновление рабочего времени гостя
+      await this.$store.dispatch('updateWorks', {
+        id_work: id_work,
+        task_name: task_name,
+        begin_date: begin_date,
+        end_date: end_date
+      });
 
       this.ShowWorkTime();
     },
     async trackingWorkTime(task_name) {
+      // создание начала рабочего времени гостя
       let data = await this.$store.dispatch('statusWorks');
 
       if (data == null) {
@@ -107,7 +116,6 @@ export default {
 
         this.workAppText = 'Закончить';
         this.nowWork = true;
-
       } else {
         data.end_date = new Date();
         await this.$store.dispatch('stopWorks', data);
@@ -122,6 +130,7 @@ export default {
       this.ShowWorkTime();
     },
     async beginInterface() {
+      // создание текущего таймера, проверка наличия текущих работ
       const data = await this.$store.dispatch('statusWorks');
 
       if (data == null) {
@@ -140,6 +149,7 @@ export default {
       }
     },
     timer() {
+      // создание текущего таймера
       setInterval(() => {
         if (this.nowWork == true) {
           if (this.time.seconds === 60) {
@@ -175,9 +185,6 @@ export default {
           this.workTime = '00:00';
         }
       }, 1000);
-    },
-    viewDate() {
-      console.log(this.date);
     }
   },
   mounted() {

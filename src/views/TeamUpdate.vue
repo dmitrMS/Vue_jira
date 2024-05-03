@@ -34,7 +34,11 @@
               v-model="item.admin_username"
             />
           </p>
-          <Button v-if="role == 'teamlead'" label="Информация" @click="infoTeam(item.id,item.name)" />
+          <Button
+            v-if="role == 'teamlead'"
+            label="Информация"
+            @click="infoTeam(item.id, item.name)"
+          />
           <Button
             label="Удалить"
             severity="danger"
@@ -42,11 +46,16 @@
           />
         </div>
       </Panel>
-      <Dialog v-model:visible="visible" maximizable modal header="Сообщение" :style="{ width: '50rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }">
-            <p class="m-0">
-                Команда создана!
-            </p>
-        </Dialog>
+      <Dialog
+        v-model:visible="visible"
+        maximizable
+        modal
+        header="Сообщение"
+        :style="{ width: '50rem' }"
+        :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
+      >
+        <p class="m-0">Команда создана!</p>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -58,7 +67,7 @@ export default {
   data() {
     return {
       teamName: '',
-      user:{},
+      user: {},
       nowWork: false,
       teams: [],
       username: localStorage.getItem('login'),
@@ -68,6 +77,7 @@ export default {
   name: 'TeamPage',
   methods: {
     async ShowTeam() {
+      // вывод команд пользователя
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +85,7 @@ export default {
         }
       };
 
-      this.teams = await this.axios.post(
+      this.teams = await this.axios.get(
         process.env.VUE_APP_URL + '/team/list',
         {},
         config
@@ -85,64 +95,56 @@ export default {
 
       this.teams = this.teams.data;
 
-      for(let element of this.teams)
-      {
-
+      for (let element of this.teams) {
         const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-key': localStorage.getItem('jwt')
-        }
-      };
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-key': localStorage.getItem('jwt')
+          }
+        };
 
-      this.user = await this.axios.post(
-        process.env.VUE_APP_URL + '/admin/data',
-        {admin_id: element.admin_id},
-        config
-      );
-      // console.log(element.admin_id);
+        this.user = await this.axios.get(
+          process.env.VUE_APP_URL + '/admin/data',
+          { admin_id: element.admin_id },
+          config
+        );
 
-      element.admin_username=toRaw(this.user.data).login;
-      // console.log(element.admin_username);
-      console.log(toRaw(this.user.data));
+        element.admin_username = toRaw(this.user.data).login;
 
-      this.user = await this.axios.post(
-        process.env.VUE_APP_URL + '/admin/data',
-        {admin_id: element.admin_id},
-        config
-      );
+        this.user = await this.axios.get(
+          process.env.VUE_APP_URL + '/admin/data',
+          { admin_id: element.admin_id },
+          config
+        );
       }
 
-      for(let element of this.teams)
-      {
-
+      for (let element of this.teams) {
         const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-key': localStorage.getItem('jwt')
-        }
-      };
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-key': localStorage.getItem('jwt')
+          }
+        };
 
+        let number_team = {};
+        number_team = await this.axios.get(
+          process.env.VUE_APP_URL + '/user_team/list',
+          { team_id: element.id },
+          config
+        );
 
-      let number_team={};
-      number_team = await this.axios.post(
-        process.env.VUE_APP_URL + '/user_team/list',
-        {team_id: element.id},
-        config
-      );
+        let countWork = 0;
 
-      let countWork = 0;
+        number_team.data.forEach(() => {
+          countWork++;
+        });
 
-      number_team.data.forEach(()=>{countWork++;});
-
-      element.number_team=countWork;
-      // console.log(toRaw(number_team.data));
-      // console.log(toRaw(number_team.data.lenght));
+        element.number_team = countWork;
       }
 
-      console.log(this.teams);
     },
     async deleteTeam(team_id) {
+      // удаление команды, в которой состоит пользователь
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -150,19 +152,24 @@ export default {
         }
       };
 
-      await this.axios.post(
-        process.env.VUE_APP_URL + '/team/delete',
-        { team_id: team_id },
+      await this.axios.delete(
+        process.env.VUE_APP_URL + '/team/delete'`/${team_id}`,
+        { },
         config
       );
 
-      this.ShowWorkTime();
+      this.ShowTeam();
     },
-    async infoTeam(team_id,team_name) {
-      await this.$store.dispatch('updateTeamId', {team_id:team_id,team_name:team_name});
+    async infoTeam(team_id, team_name) {
+      // переключение на раздел с информацией о команде
+      await this.$store.dispatch('updateTeamId', {
+        team_id: team_id,
+        team_name: team_name
+      });
       this.$router.push('/user_team');
     },
     async createTeam(name) {
+      // создание команды
       const config = {
         headers: {
           'Content-Type': 'application/json',

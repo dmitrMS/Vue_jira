@@ -11,6 +11,7 @@ export default {
   data() {
     return {
       username: localStorage.getItem('login'),
+      // создание бококвой панели для информации о командах
       items: [
         {
           label: 'Задания',

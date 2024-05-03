@@ -28,8 +28,8 @@
         </template>
         <template #end>
           <div class="exit">
-          <p class="login">{{ this.username }}</p>
-          <Button class="button" @click="this.userLogIn">Войти</Button>
+            <p class="login">{{ this.username }}</p>
+            <Button class="button" @click="this.userLogIn">Войти</Button>
           </div>
         </template>
       </Menubar>
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       username: 'Гость',
+      // запонение меню для гостя
       items: [
         {
           label: 'Трэкинг',
@@ -55,6 +56,7 @@ export default {
   },
   methods: {
     userLogIn() {
+      // перемещение на вкладку входа
       this.$router.push({ path: '/' });
     }
   }
@@ -82,11 +84,11 @@ body {
   display: inline-flex;
 }
 
-.exit .login{
+.exit .login {
   margin-right: 20px;
 }
 
-.exit .button{
+.exit .button {
   margin-block: auto;
   height: 30px;
 }

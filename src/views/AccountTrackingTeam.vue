@@ -3,16 +3,16 @@
     <div id="components-demo">
       <admin-layout />
       <h2>Статистика</h2>
-    <div class="team">
-      <p style="margin: 0%;">Команда:</p>
-      <select
-        v-model="selectedTeam"
-        @click="this.selectTeam()"
-        class="dropdown"
-      >
-        <option v-for="item in teams" :key="item">{{ item.name }}</option>
-      </select>
-    </div>
+      <div class="team">
+        <p style="margin: 0%">Команда:</p>
+        <select
+          v-model="selectedTeam"
+          @click="this.selectTeam()"
+          class="dropdown"
+        >
+          <option v-for="item in teams" :key="item">{{ item.name }}</option>
+        </select>
+      </div>
       <Panel class="info">
         <div class="crud-body">
           <p>Пользователь: {{ username }}</p>
@@ -20,7 +20,7 @@
           <p style="margin: 15px">Работ за месяц: {{ workMonth }}</p>
         </div>
       </Panel>
-      <calendar-time-team :key="this.teamId"/>
+      <calendar-time-team :key="this.teamId" />
     </div>
   </div>
 </template>
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     async getStatistics() {
+      // вывод статистик работ за день и месяц
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -82,6 +83,7 @@ export default {
       });
     },
     async showTeam() {
+      // вывод списка команд
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +91,7 @@ export default {
         }
       };
 
-      this.teams = await this.axios.post(
+      this.teams = await this.axios.get(
         process.env.VUE_APP_URL + '/team/list',
         {},
         config
@@ -106,14 +108,12 @@ export default {
       }
     },
     async selectTeam() {
+      // выбор необходимой команды
       this.selectedTeamObj = await this.teams.find(
         (item) => item.name == this.selectedTeam
       );
 
-      await this.$store.dispatch(
-        'updateTeamIdCal',
-        this.selectedTeamObj.id
-      );
+      await this.$store.dispatch('updateTeamIdCal', this.selectedTeamObj.id);
       this.teamId = this.selectedTeamObj.id;
 
       this.getStatistics();
@@ -192,7 +192,7 @@ export default {
   font-size: 16pt;
 }
 
-.all-body .team select{
+.all-body .team select {
   width: 20%;
 }
 </style>
