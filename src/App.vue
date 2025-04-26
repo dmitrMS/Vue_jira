@@ -4,7 +4,7 @@
     <template>
       <VErrorBoundary :fall-back="fallBack" stop-propagation> </VErrorBoundary>
     </template>
-    <footer-layout class="footer-bottom" />
+    <!-- <footer-layout class="footer-bottom" /> -->
   </div>
 </template>
 

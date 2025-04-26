@@ -53,8 +53,8 @@ export default {
 
       let works = toRaw(
         await this.axios.post(
-          process.env.VUE_APP_URL + '/team/track/list',
-          { team_id: Number(this.teamId) },
+          process.env.VUE_APP_URL + `/team/track/list/${Number(this.teamId)}`,
+          // { team_id: Number(this.teamId) },
           config
         )
       );
@@ -93,7 +93,7 @@ export default {
 
       this.teams = await this.axios.get(
         process.env.VUE_APP_URL + '/team/list',
-        {},
+        // {},
         config
       );
 
@@ -126,7 +126,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .all-body {
   background-color: #7ab7f0d7;
   background-position: bottom right;

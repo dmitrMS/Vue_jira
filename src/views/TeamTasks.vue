@@ -84,8 +84,8 @@ export default {
 
       this.teamTasks = toRaw(
         await this.axios.get(
-          process.env.VUE_APP_URL + '/task/list',
-          { team_id: Number(this.teamId) },
+          process.env.VUE_APP_URL + `/task/list/${Number(this.teamId)}`,
+          // { team_id: Number(this.teamId) },
           config
         )
       );
@@ -97,8 +97,8 @@ export default {
       for (let element of this.teamTasks) {
         numTaskWorks = toRaw(
           await this.axios.get(
-            process.env.VUE_APP_URL + '/task/track/list',
-            { task_id: Number(element.id) },
+            process.env.VUE_APP_URL + `/task/track/list/${Number(element.id)}`,
+            // { task_id: Number(element.id) },
             config
           )
         );

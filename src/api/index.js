@@ -20,9 +20,8 @@ export class Api {
       }
     };
 
-    const dataUser = await axios.post(
+    const dataUser = await axios.get(
       process.env.VUE_APP_URL + '/auth/data',
-      {},
       config
     );
 
@@ -158,16 +157,22 @@ export class Api {
         config
       );
 
+      // const config1 = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'x-auth-key': data.jwt
+      //   }
+      // };
+
       const config1 = {
         headers: {
           'Content-Type': 'application/json',
-          'x-auth-key': data.jwt
+          'x-auth-key': localStorage.getItem('jwt')
         }
       };
 
-      const dataUser = await axios.post(
+      const dataUser = await axios.get(
         process.env.VUE_APP_URL + '/auth/data',
-        {},
         config1
       );
 

@@ -88,8 +88,8 @@ export default {
 
       this.teamUsers = toRaw(
         await this.axios.get(
-          process.env.VUE_APP_URL + '/user_team/list',
-          { team_id: Number(this.teamId) },
+          process.env.VUE_APP_URL + `/user_team/list/${Number(this.teamId)}`,
+          // { team_id: Number(this.teamId) },
           config
         )
       );
@@ -107,7 +107,7 @@ export default {
 
       await this.axios.delete(
         process.env.VUE_APP_URL + '/user_team/delete'+`/${user_id}`+`/${team_id}`,
-        {},
+        // {},
         config
       );
 
@@ -135,5 +135,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

@@ -1,20 +1,21 @@
 <template>
-  <div class="all-body">
+  <div class="track">
     <div id="components-demo">
       <auth-layout v-if="role == 'user'" />
       <admin-layout v-else />
     </div>
-    <p class="timer">{{ workTime }}</p>
-    <div class="track-body">
+    <p class="track__timer">{{ workTime }}</p>
+    <div class="track__parameters">
       <select
         v-model="selectedTeam"
         @click="this.selectTeam()"
-        class="dropdown"
+        class="track__parameters-dropdown"
       >
         <option>Без команды</option>
         <option v-for="item in teams" :key="item">{{ item.name }}</option>
       </select>
       <input
+        class="track__parameters-input"
         v-if="selectedTeam == 'Без команды'"
         type="text"
         placeholder="Назовите задание"
@@ -24,63 +25,70 @@
         v-else
         v-model="selectedTask"
         @click="this.selectTask()"
-        class="dropdown"
+        class="track__parameters-dropdown"
       >
         <option v-for="item in tasks" :key="item">{{ item.name }}</option>
       </select>
-      <button @click="trackingWorkTime(this.workName)">
+      <button
+        @click="trackingWorkTime(this.workName)"
+        class="track__parameters-button"
+      >
         {{ workAppText }}
       </button>
     </div>
-    <div class="works">
+    <div class="track__works">
       <Panel v-for="item in works" :key="item" style="height: 100px">
-        <div class="crud-body">
-          <p class="m-0">
-            Пользователь:
-            <InputText
-              type="text"
-              class="crud"
-              placeholder="Имя пользователя"
-              v-model="this.username"
-            />
-            Задание:
-            <InputText
-              type="text"
-              class="crud"
-              placeholder="Задание"
-              v-model="item.task_name"
-            />
-            Начало:<InputText
-              type="text"
-              class="crud"
-              placeholder="дата начала"
-              v-model="item.begin_date"
-            />
-            Конец:<InputText
-              type="text"
-              class="crud"
-              placeholder="дата окончания"
-              v-model="item.end_date"
-            />
-          </p>
-          <Button
-            label="Изменить"
-            v-if="item.task_id == null"
-            severity="info"
-            @click="
-              updateWorkTime(
-                item.id,
-                item.task_name,
-                item.begin_date,
-                item.end_date
-              )
-            "
+        <div class="track__works__crudbody">
+          <!-- <div class="track__works__crudbody-p"> -->
+          Пользователь:
+          <input
+            type="text"
+            class="track__works__crudbody-input"
+            placeholder="Имя пользователя"
+            v-model="this.username"
           />
-          <Button
-            label="Удалить"
-            severity="danger"
-            @click="deleteWorkTime(item.id)"
+          Задание:
+          <input
+            type="text"
+            class="track__works__crudbody-input"
+            placeholder="Задание"
+            v-model="item.task_name"
           />
+          Начало:<input
+            type="text"
+            class="track__works__crudbody-input"
+            placeholder="дата начала"
+            v-model="item.begin_date"
+          />
+          Конец:<input
+            type="text"
+            class="track__works__crudbody-input"
+            placeholder="дата окончания"
+            v-model="item.end_date"
+          />
+          <!-- </div> -->
+          <div class="track__works__crudbody__buttongroup">
+            <button
+              class="track__works__crudbody__buttongroup-button"
+              v-if="item.task_id == null"
+              @click="
+                updateWorkTime(
+                  item.id,
+                  item.task_name,
+                  item.begin_date,
+                  item.end_date
+                )
+              "
+            >
+              Изменить
+            </button>
+            <button
+              class="trackworks__crudbody-button"
+              @click="deleteWorkTime(item.id)"
+            >
+              Удалить
+            </button>
+          </div>
         </div>
       </Panel>
     </div>
@@ -89,6 +97,7 @@
 
 <script>
 import { toRaw } from 'vue';
+import './TrackPage.css';
 
 export default {
   data() {
@@ -123,17 +132,15 @@ export default {
 
       if (this.selectedTeam == 'Без команды') {
         this.works = toRaw(
-          await this.axios.get(
-            process.env.VUE_APP_URL + '/track/list',
-            {},
-            config
-          )
+          await this.axios.get(process.env.VUE_APP_URL + '/track/list', config)
         );
       } else {
+        console.log(toRaw(this.selectedTeamObj).id);
         this.works = toRaw(
           await this.axios.get(
-            process.env.VUE_APP_URL + '/track/list',
-            { team_id: toRaw(this.selectedTeamObj).id },
+            process.env.VUE_APP_URL +
+              `/track/list/${toRaw(this.selectedTeamObj).id}`,
+            // { team_id: toRaw(this.selectedTeamObj).id },
             config
           )
         );
@@ -152,7 +159,6 @@ export default {
 
       this.teams = await this.axios.get(
         process.env.VUE_APP_URL + '/team/list',
-        {},
         config
       );
 
@@ -160,7 +166,7 @@ export default {
 
       this.teams = this.teams.data;
 
-      this.showTasks();
+      // this.showTasks();
     },
     async selectTeam() {
       // выбор команды
@@ -168,9 +174,10 @@ export default {
         this.selectedTeamObj = this.teams.find(
           (item) => item.name == this.selectedTeam
         );
+        await this.showTasks();
       }
 
-      await this.showTasks();
+      // await this.showTasks();
       try {
         if (this.tasks.length !== 0) {
           this.selectedTask = toRaw(this.tasks[0]).name;
@@ -200,9 +207,11 @@ export default {
         }
       };
 
+      console.log(toRaw(this.selectedTeamObj).id);
       this.tasks = await this.axios.get(
-        process.env.VUE_APP_URL + '/task/list',
-        { team_id: toRaw(this.selectedTeamObj).id },
+        process.env.VUE_APP_URL +
+          `/task/list/${toRaw(this.selectedTeamObj).id}`,
+        // { team_id: toRaw(this.selectedTeamObj).id },
         config
       );
 
@@ -221,7 +230,7 @@ export default {
 
       this.works = toRaw(
         await this.axios.delete(
-          process.env.VUE_APP_URL + '/track/delete'+`/${id_work}`,
+          process.env.VUE_APP_URL + '/track/delete' + `/${id_work}`,
           {},
           config
         )
@@ -239,7 +248,7 @@ export default {
       };
 
       this.works = toRaw(
-        await this.axios.put(
+        await this.axios.patch(
           process.env.VUE_APP_URL + '/track/update',
           {
             id_work: id_work,
@@ -263,7 +272,6 @@ export default {
       };
       const { data } = await this.axios.get(
         process.env.VUE_APP_URL + '/track/status',
-        {},
         config
       );
 
@@ -316,7 +324,6 @@ export default {
       };
       const { data } = await this.axios.get(
         process.env.VUE_APP_URL + '/track/status',
-        {},
         config
       );
 
@@ -382,64 +389,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.all-body {
-  background-color: #7ab7f0d7;
-  background-position: bottom right;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-}
-
-.track-body {
-  margin: 0 0;
-  font-style: italic;
-  display: inline-flex;
-}
-
-.track-body .dropdown {
-  height: 40px;
-  margin-right: 20px;
-}
-
-.track-body input {
-  border: 0px solid;
-  border-radius: 30px;
-  height: 35px;
-  width: 1200px;
-  opacity: 100%;
-}
-
-.track-body button {
-  background-color: #16558fd7;
-  color: #ffffffd7;
-  border: 0px solid;
-  width: 200px;
-  height: 60px;
-  font-size: 16pt;
-  font-weight: normal;
-  transform: translate(15%, -20%);
-}
-
-.all-body .timer {
-  font-size: 16pt;
-  line-height: 0;
-}
-
-.all-body .crud {
-  border: 0px solid;
-  height: 10px;
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-.crud-body {
-  display: inline-flex;
-}
-
-.crud-body button {
-  height: 30px;
-  margin-left: 15px;
-}
-</style>

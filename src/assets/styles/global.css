@@ -1,0 +1,12 @@
+:root {
+    --primary-color: #e9862a;
+    --text-color-white: white;
+    --back-color-black: black;
+    --secondary-color: #187cd3;
+    --job-color: #979797;
+    --border-color: rgb(209, 208, 208);
+  
+    --z-index-default: 1;
+    --z-index-front: 2;
+    --z-index-dropdown: 3;
+  }

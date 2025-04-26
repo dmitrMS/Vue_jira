@@ -1,19 +1,20 @@
 <template>
-  <div id="components-demo">
+  <!-- <div id="components-demo">
     <no-auth-layout> </no-auth-layout>
-  </div>
-  <div class="authbody">
-    <div class="txt">
+  </div> -->
+  <Menubar/>
+  <div class="authbodysign">
+    <div class="authbodysign__text">
       <h1>Регистрация</h1>
-      <div class="auth">
+      <div class="authbodysignin__text-block">
         <p>логин:</p>
-        <FloatLabel>
-          <InputText id="username" v-model="login" />
-        </FloatLabel>
+        <!-- <FloatLabel> -->
+          <input id="username" v-model="login" />
+        <!-- </FloatLabel> -->
         <p>пароль:</p>
-        <FloatLabel>
-          <Password v-model="password" inputId="password">
-            <template #header>
+        <!-- <FloatLabel> -->
+          <input type="password" v-model="password" inputId="password" />
+            <!-- <template #header>
               <h6>Введите пароль</h6>
             </template>
             <template #footer>
@@ -26,11 +27,11 @@
                 <li>1 спец символ</li>
                 <li>Минимум 8 символов</li>
               </ul>
-            </template>
-          </Password>
-        </FloatLabel>
+            </template> -->
+          <!-- </input> -->
+        <!-- </FloatLabel> -->
       </div>
-      <button class="button_auth" @click="getAuthentification" role="link">
+      <button @click="getAuthentification" role="link">
         Создать
       </button>
       <br />
@@ -40,6 +41,8 @@
 </template>
 
 <script>
+import './Sign.css';
+
 export default {
   name: 'SignUp',
   data() {
@@ -70,59 +73,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.authbody {
-  background-color: #7ab7f0d7;
-  background-position: bottom right;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-}
-
-.authbody .auth input {
-  background-color: #7ab7f000;
-  border: 0px solid;
-  border-bottom: 2px solid #000000;
-  width: 200px;
-  opacity: 100%;
-}
-
-.authbody .auth input:focus {
-  outline: none;
-}
-
-.authbody a {
-  color: #000000d7;
-  font-size: 16pt;
-}
-
-.authbody button {
-  background-color: #2e78bdd7;
-  color: #ffffffd7;
-  border: 0px solid;
-  width: 200px;
-  height: 60px;
-  font-size: 16pt;
-  font-weight: normal;
-  border-radius: 30px;
-  margin: 2%;
-}
-
-.authbody h1 {
-  font-weight: normal;
-}
-
-.authbody .txt {
-  margin: 0 0;
-  text-align: center;
-  font-style: italic;
-  line-height: 5;
-  transform: translate(0%, 25%);
-}
-
-.authbody .auth {
-  font-size: 16pt;
-  line-height: 0;
-}
-</style>

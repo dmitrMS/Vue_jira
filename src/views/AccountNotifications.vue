@@ -55,7 +55,7 @@ export default {
       this.notifications = toRaw(
         await this.axios.get(
           process.env.VUE_APP_URL + '/notification/list',
-          {},
+          // {},
           config
         )
       );
@@ -72,7 +72,7 @@ export default {
 
       await this.axios.delete(
         process.env.VUE_APP_URL + '/notification/delete'+`/${notification_id}`,
-        { },
+        // { },
         config
       );
 
@@ -86,7 +86,7 @@ export default {
         }
       };
 
-      await this.axios.put(
+      await this.axios.patch(
         process.env.VUE_APP_URL + '/notification/update',
         { notification_id:notification_id,team_id:team_id },
         config
@@ -100,5 +100,3 @@ export default {
   }
 };
 </script>
-
-<style></style>

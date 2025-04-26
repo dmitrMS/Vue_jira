@@ -39,8 +39,8 @@ export default {
       };
       let works = toRaw(
         await this.axios.get(
-          process.env.VUE_APP_URL + '/track/list',
-          { task_id: 1 },
+          process.env.VUE_APP_URL + '/track/list/1',
+          // { task_id: 1 },
           config
         )
       );
@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .authbodysignin {
   background-color: #7ab7f0d7;
   position: absolute;

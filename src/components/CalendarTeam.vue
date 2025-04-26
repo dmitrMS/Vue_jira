@@ -92,8 +92,8 @@ export default {
       };
       let works = toRaw(
         await this.axios.get(
-          process.env.VUE_APP_URL + '/team/track/list',
-          { team_id: Number(this.teamId) },
+          process.env.VUE_APP_URL + `/team/track/list/${Number(this.teamId)}`,
+          // { team_id: Number(this.teamId) },
           config
         )
       );

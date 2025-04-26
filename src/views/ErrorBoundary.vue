@@ -30,12 +30,10 @@
   };
   </script>
   
-  <style>
+  <style scoped>
   .authbodysignin {
     background-color: #7ab7f0d7;
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
+
     overflow: hidden;
   }
   

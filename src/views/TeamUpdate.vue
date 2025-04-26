@@ -87,7 +87,7 @@ export default {
 
       this.teams = await this.axios.get(
         process.env.VUE_APP_URL + '/team/list',
-        {},
+        // {},
         config
       );
 
@@ -104,16 +104,16 @@ export default {
         };
 
         this.user = await this.axios.get(
-          process.env.VUE_APP_URL + '/admin/data',
-          { admin_id: element.admin_id },
+          process.env.VUE_APP_URL + `/admin/data/${element.admin_id}`,
+          // { admin_id: element.admin_id },
           config
         );
 
         element.admin_username = toRaw(this.user.data).login;
 
         this.user = await this.axios.get(
-          process.env.VUE_APP_URL + '/admin/data',
-          { admin_id: element.admin_id },
+          process.env.VUE_APP_URL + `/admin/data/${element.admin_id}`,
+          // { admin_id: element.admin_id },
           config
         );
       }
@@ -128,8 +128,8 @@ export default {
 
         let number_team = {};
         number_team = await this.axios.get(
-          process.env.VUE_APP_URL + '/user_team/list',
-          { team_id: element.id },
+          process.env.VUE_APP_URL + `/user_team/list/${element.id}`,
+          // { team_id: element.id },
           config
         );
 
