@@ -67,7 +67,7 @@ export default {
         };
         const request = await this.$store.dispatch('getJwt', config);
 
-        if (request !== undefined) this.$router.push({ path: '/track' });
+        if (request !== undefined) this.$router.push({ path: '/projects' });
       }
     }
   }

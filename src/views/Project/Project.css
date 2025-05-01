@@ -1,0 +1,108 @@
+.project {
+  background-color: #7ab7f0d7;
+  position: absolute;
+  display: block;
+  width: 100vw;
+  flex-direction: row;
+}
+
+.menubar {
+  height: 60px;
+  width: 100%;
+  background-color: #2e78bd;
+  /* чтобы Menubar не занимал всё */
+}
+
+.project__window {
+  display: flex;
+}
+
+.project__window-h2 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 36pt;
+  color: #ffffff;
+}
+
+.project__sidebar {
+  width: 17%;
+  background-color: #ffffff;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.project__parameters {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.project__parameters-input {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.project__parameters-button {
+  background-color: #16558fd7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.project__works {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project__panel {
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.project__works__crudbody {
+  display: flex;
+  flex-direction: column;
+}
+
+.project__works__crudbody-input {
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 5px;
+  outline: none;
+  margin-bottom: 10px;
+}
+
+.project__works__crudbody__buttongroup {
+  display: flex;
+  gap: 5px;
+  justify-content: space-between;
+}
+
+.project__works__crudbody__buttongroup-button,
+.project__works__crudbody-button {
+  background-color: #2e78bd;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* При маленьком экране показывать только иконку */
+@media (max-width: 768px) {
+  .button-text {
+    display: none;
+  }
+}

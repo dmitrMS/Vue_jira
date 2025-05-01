@@ -4,6 +4,8 @@ import router from './router';
 import axios from 'axios';
 import vueAxios from 'vue-axios';
 import { store } from './store';
+// import Gantt from 'frappe-gantt';
+
 import mainLayout from './Layout/Layout.vue';
 import NoAuthLayout from './Layout/LayoutNoAuth.vue';
 import FooterLayout from './Layout/LayoutFooter.vue';
@@ -12,7 +14,10 @@ import teamLayout from './Layout/LayoutTeam.vue';
 import CalendarTime from './components/Calendar.vue';
 import CalendarTimeTeam from './components/CalendarTeam.vue';
 // import PrimeVue from 'primevue/config';
-import Menubar from './components/Menubar.vue';
+import Menubar from './components/Menubar/Menubar.vue';
+import TaskMenubar from './components/TaskMenubar/TaskMenubar.vue';
+import ProjectTasks from './components/ProjectTasks/ProjectTasks.vue';
+import GanttChart from './components/GanttChart/GanttChart.vue';
 // import Menu from 'primevue/menu';
 // import Password from 'primevue/password';
 // import Calendar from 'primevue/calendar';
@@ -33,6 +38,9 @@ app.component('team-layout', teamLayout);
 app.component('calendar-time', CalendarTime);
 app.component('calendar-time-team', CalendarTimeTeam);
 app.component('Menubar', Menubar);
+app.component('TaskMenubar', TaskMenubar);
+app.component('projectTasks', ProjectTasks);
+app.component('ganttChart', GanttChart);
 // app.component('Menu', Menu);
 // app.component('Password', Password);
 // app.component('Calendar', Calendar);
@@ -43,6 +51,7 @@ app.component('Menubar', Menubar);
 
 // подлючение библиотек для использования во всех vue компонентах без import
 // app.use(PrimeVue);
+// app.use(Gantt);
 app.use(router);
 app.use(vueAxios, axios);
 app.use(store);

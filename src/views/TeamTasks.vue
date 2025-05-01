@@ -85,7 +85,6 @@ export default {
       this.teamTasks = toRaw(
         await this.axios.get(
           process.env.VUE_APP_URL + `/task/list/${Number(this.teamId)}`,
-          // { team_id: Number(this.teamId) },
           config
         )
       );

@@ -30,7 +30,7 @@ export default {
       try {
         await this.$store.dispatch('verifyJwt');
 
-        this.$router.push({ path: '/track' });
+        this.$router.push({ path: '/projects' });
       } catch (err) {
         console.log(err);
 

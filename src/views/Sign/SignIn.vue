@@ -44,7 +44,7 @@ export default {
 
       this.serverMessage = request.message;
 
-      if (request.jwt !== undefined) this.$router.push({ path: '/track' });
+      if (request.jwt !== undefined) this.$router.push({ path: '/projects' });
     }
   }
 };

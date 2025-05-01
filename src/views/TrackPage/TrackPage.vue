@@ -37,7 +37,7 @@
       </button>
     </div>
     <div class="track__works">
-      <Panel v-for="item in works" :key="item" style="height: 100px">
+      <div v-for="item in works" :key="item">
         <div class="track__works__crudbody">
           <!-- <div class="track__works__crudbody-p"> -->
           Пользователь:
@@ -83,14 +83,14 @@
               Изменить
             </button>
             <button
-              class="trackworks__crudbody-button"
+              class="track__works__crudbody-button"
               @click="deleteWorkTime(item.id)"
             >
               Удалить
             </button>
           </div>
         </div>
-      </Panel>
+      </div>
     </div>
   </div>
 </template>
@@ -207,7 +207,7 @@ export default {
         }
       };
 
-      console.log(toRaw(this.selectedTeamObj).id);
+      // console.log(toRaw(this.selectedTeamObj).id);
       this.tasks = await this.axios.get(
         process.env.VUE_APP_URL +
           `/task/list/${toRaw(this.selectedTeamObj).id}`,
@@ -231,7 +231,6 @@ export default {
       this.works = toRaw(
         await this.axios.delete(
           process.env.VUE_APP_URL + '/track/delete' + `/${id_work}`,
-          {},
           config
         )
       );

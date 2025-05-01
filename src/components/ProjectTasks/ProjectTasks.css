@@ -1,0 +1,78 @@
+@import "@/assets/styles/global.css";
+
+.tasks {
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.tasks__parameters {
+  margin: 0 0;
+  font-style: italic;
+  display: inline-flex;
+  padding-bottom: 3%;
+}
+
+.tasks__parameters-dropdown {
+  height: 40px;
+  margin-right: 20px;
+}
+
+.tasks__parameters-input {
+  border: 0px solid;
+  border-radius: 30px;
+  height: 35px;
+  width: 600px;
+  margin-left: 5%;
+}
+
+.tasks__parameters-button {
+  background-color: #16558fd7;
+  color: #ffffffd7;
+  border: 0px solid;
+  font-size: 16pt;
+  font-weight: normal;
+  margin-left: 5%;
+}
+
+/* .all-body .crud {
+  border: 0px solid;
+  height: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+} */
+
+.tasks__works {
+  display: block;
+}
+
+.tasks__works__crudbody {
+    display: flex;
+    background-color: var(--text-color-white);
+    border-bottom: 1px var(--border-color) solid;
+    align-items: center;
+    padding: 1%;
+    padding-left: 5%;
+}
+
+.tasks__works__crudbody-input
+{
+  margin-left: 1%;
+  margin-right: 1%;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
+  outline: none;
+}
+
+.tasks__works__crudbody__buttongroup {
+  display: flex;
+  margin-left: 2%;
+  justify-content: flex-end;
+}
+
+.tasks__works__crudbody-button {
+  margin-right: 10%;
+}
+
+
