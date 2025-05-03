@@ -1,35 +1,9 @@
 <template>
   <div class="track">
-    <!-- <div id="components-demo">
-      <auth-layout v-if="role == 'user'" />
-      <admin-layout v-else />
-    </div> -->
-    <Menubar/>
+    <button class="track__back-button" @click="$emit('close')">Закрыть</button>
     <p class="track__timer">{{ workTime }}</p>
     <div class="track__parameters">
-      <!-- <select
-        v-model="selectedTeam"
-        @click="this.selectTeam()"
-        class="track__parameters-dropdown"
-      >
-        <option>Без команды</option>
-        <option v-for="item in teams" :key="item">{{ item.name }}</option>
-      </select> -->
-      <input
-        class="track__parameters-input"
-        v-if="selectedTeam == 'Без команды'"
-        type="text"
-        placeholder="Назовите задание"
-        v-model="workName"
-      />
-      <!-- <select
-        v-else
-        v-model="selectedTask"
-        @click="this.selectTask()"
-        class="track__parameters-dropdown"
-      >
-        <option v-for="item in tasks" :key="item">{{ item.name }}</option>
-      </select> -->
+      <p>{{ this.task_name }}</p>
       <button
         @click="trackingWorkTime(this.workName)"
         class="track__parameters-button"
@@ -40,7 +14,6 @@
     <div class="track__works">
       <div v-for="item in works" :key="item">
         <div class="track__works__crudbody">
-          <!-- <div class="track__works__crudbody-p"> -->
           Пользователь:
           <input
             type="text"
@@ -67,7 +40,6 @@
             placeholder="дата окончания"
             v-model="item.end_date"
           />
-          <!-- </div> -->
           <div class="track__works__crudbody__buttongroup">
             <button
               class="track__works__crudbody__buttongroup-button"
@@ -98,7 +70,7 @@
 
 <script>
 import { toRaw } from 'vue';
-import './TrackPage.css';
+import './TrackPageComponent.css';
 
 export default {
   data() {
@@ -121,6 +93,34 @@ export default {
     };
   },
   name: 'TrackPage',
+  // props: {
+  //   task_id: {
+  //     type: Number,
+  //     required: true
+  //   },
+  //   task_name: {
+  //     type: Number,
+  //     required: true
+  //   }
+  // },
+  computed: {
+    task_id() {
+      return this.$store.state.task_id;
+    },
+    task_name() {
+      return this.$store.state.task_name;
+    }
+  },
+  watch: {
+    task_id: {
+      immediate: true,
+      handler(newId) {
+        if (newId) {
+          this.showWorkTime(newId);
+        }
+      }
+    }
+  },
   methods: {
     async showWorkTime() {
       // показ рабочего времени пользователя в одиночку, при выборе команды- в этой команде
@@ -131,95 +131,15 @@ export default {
         }
       };
 
-      // if (this.selectedTeam == 'Без команды') {
-        this.works = toRaw(
-          await this.axios.get(process.env.VUE_APP_URL + '/track/list', config)
-        );
-      // } else {
-      //   console.log(toRaw(this.selectedTeamObj).id);
-      //   this.works = toRaw(
-      //     await this.axios.get(
-      //       process.env.VUE_APP_URL +
-      //         `/track/list/${toRaw(this.selectedTeamObj).id}`,
-      //       // { team_id: toRaw(this.selectedTeamObj).id },
-      //       config
-      //     )
-      //   );
-      // }
+      this.works = toRaw(
+        await this.axios.get(
+          process.env.VUE_APP_URL + `/task/track/list/${Number(this.task_id)}`,
+          config
+        )
+      );
 
       this.works = this.works.data;
     },
-    // async showTeam() {
-    //   // показ списка команд
-    //   const config = {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'x-auth-key': localStorage.getItem('jwt')
-    //     }
-    //   };
-
-    //   this.teams = await this.axios.get(
-    //     process.env.VUE_APP_URL + '/team/list',
-    //     config
-    //   );
-
-    //   this.teams = toRaw(this.teams);
-
-    //   this.teams = this.teams.data;
-
-    //   // this.showTasks();
-    // },
-    // async selectTeam() {
-    //   // выбор команды
-    //   if (this.selectedTeam !== 'Без команды') {
-    //     this.selectedTeamObj = this.teams.find(
-    //       (item) => item.name == this.selectedTeam
-    //     );
-    //     await this.showTasks();
-    //   }
-
-    //   // await this.showTasks();
-    //   try {
-    //     if (this.tasks.length !== 0) {
-    //       this.selectedTask = toRaw(this.tasks[0]).name;
-    //       await this.selectTask();
-    //     }
-    //     this.showWorkTime();
-    //   } catch (err) {
-    //     this.showWorkTime();
-    //   }
-    // },
-    // async selectTask() {
-    //   // выбор командного задания для трэкинга
-    //   if (this.selectedTeam !== 'Без команды' && this.tasks.length !== 0) {
-    //     this.selectedTaskObj = this.tasks.find(
-    //       (item) => item.name == this.selectedTask
-    //     );
-    //   }
-
-    //   this.showTasks();
-    // },
-    // async showTasks() {
-    //   // показ командных заданий
-    //   const config = {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'x-auth-key': localStorage.getItem('jwt')
-    //     }
-    //   };
-
-    //   // console.log(toRaw(this.selectedTeamObj).id);
-    //   this.tasks = await this.axios.get(
-    //     process.env.VUE_APP_URL +
-    //       `/task/list/${toRaw(this.selectedTeamObj).id}`,
-    //     // { team_id: toRaw(this.selectedTeamObj).id },
-    //     config
-    //   );
-
-    //   this.tasks = toRaw(this.tasks);
-
-    //   this.tasks = this.tasks.data;
-    // },
     async deleteWorkTime(id_work) {
       // удаление записи о рабочем времени
       const config = {
@@ -262,7 +182,7 @@ export default {
 
       this.showWorkTime();
     },
-    async trackingWorkTime(task_name) {
+    async trackingWorkTime() {
       // запустить начало рабочего времени
       const config = {
         headers: {
@@ -276,28 +196,17 @@ export default {
       );
 
       if ((await data) == null) {
-        if (this.selectedTeam == 'Без команды') {
-          await this.axios.post(
-            process.env.VUE_APP_URL + '/track/start',
-            { task_name: task_name },
-            config
-          );
+        await this.axios.post(
+          process.env.VUE_APP_URL + '/track/start',
+          {
+            task_name: this.task_name,
+            task_id: this.task_id
+          },
+          config
+        );
 
-          this.workAppText = 'Закончить';
-          this.nowWork = true;
-        } else if (this.tasks.length !== 0) {
-          await this.axios.post(
-            process.env.VUE_APP_URL + '/track/start',
-            {
-              task_name: toRaw(this.selectedTaskObj).name,
-              task_id: toRaw(this.selectedTaskObj).id
-            },
-            config
-          );
-
-          this.workAppText = 'Закончить';
-          this.nowWork = true;
-        }
+        this.workAppText = 'Закончить';
+        this.nowWork = true;
       } else {
         await this.axios.post(
           process.env.VUE_APP_URL + '/track/stop',

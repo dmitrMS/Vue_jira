@@ -77,4 +77,10 @@ export default {
 
 <style>
 @import url('https://unpkg.com/frappe-gantt@latest/dist/frappe-gantt.min.css');
+
+.gantt-container {
+    background-color: white;
+    height: 100vh;
+}
+
 </style>

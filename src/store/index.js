@@ -8,8 +8,8 @@ export const store = createStore({
     jwt: '',
     login: '',
     password: '',
-    team_id: null,
-    team_name: null,
+    task_id: null,
+    task_name: null,
     team_id_cal: null,
     works: []
   },
@@ -20,10 +20,10 @@ export const store = createStore({
       state.jwt = payload;
     },
     changeTeamId(state, payload) {
-      state.team_id = payload;
+      state.task_id = payload;
     },
     changeTeamName(state, payload) {
-      state.team_name = payload;
+      state.task_name = payload;
     },
     changeTeamIdCal(state, payload) {
       state.team_id_cal = payload;
@@ -38,7 +38,7 @@ export const store = createStore({
       state.works.push(payload);
     }
   },
-  actions: { 
+  actions: {
     // комбинированные действия с  параметрами в session storage
     updateJwt({ commit }, note) {
       commit('changeJwt', note);
@@ -62,13 +62,12 @@ export const store = createStore({
 
       commit('changeJwt', '');
     },
-    updateTeamId({ commit }, note) {
+    updateTaskId({ commit }, note) {
+      // console.log(note.task_id);
+      // api.updateTeam(note.task_id,note.task_name);
 
-      console.log(note.team_id);
-      api.updateTeam(note.team_id,note.team_name);
-
-      commit('changeTeamId', note.team_id);
-      commit('changeTeamName', note.team_name);
+      commit('changeTeamId', note.id);
+      commit('changeTeamName', note.name);
     },
     updateTeamIdCal({ commit }, note) {
       api.updateTeamCal(note);

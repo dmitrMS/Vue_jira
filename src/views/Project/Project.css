@@ -1,63 +1,69 @@
 .project {
   background-color: #7ab7f0d7;
   position: absolute;
-  display: block;
   width: 100vw;
-  flex-direction: row;
-}
-
-.menubar {
-  height: 60px;
-  width: 100%;
-  background-color: #2e78bd;
-  /* чтобы Menubar не занимал всё */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .project__window {
   display: flex;
-}
-
-.project__window-h2 {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 36pt;
-  color: #ffffff;
+  flex: 1;
+  overflow: hidden;
 }
 
 .project__sidebar {
-  width: 17%;
+  width: 20%;
   background-color: #ffffff;
   display: flex;
-  height: 100vh;
   flex-direction: column;
   padding: 20px;
   overflow-y: auto;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  border-right: 1px solid #e0e0e0;
+}
+
+.project__sidebar--collapsed {
+  display: none;
+}
+
+.project__content {
+  flex: 1;
+ /* padding: 20px; */
+  overflow-y: auto;
 }
 
 .project__parameters {
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+  gap: 10px;
 }
 
 .project__parameters-input {
   border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 10px;
+  border-radius: 4px;
+  padding: 8px 12px;
+  font-size: 14px;
 }
 
 .project__parameters-button {
   background-color: #16558fd7;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 10px;
-  font-size: 14px;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.project__parameters-button:hover {
+  background-color: #13487ad7;
+}
+
+.project__parameters-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
 }
 
 .project__works {
@@ -67,42 +73,82 @@
 }
 
 .project__panel {
-  background-color: #f1f1f1;
-  border-radius: 8px;
-  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 12px;
+  border: 1px solid #dee2e6;
+}
+
+.project__panel--active {
+  border-left: 4px solid #2e78bd;
+  background-color: #e7f1ff;
 }
 
 .project__works__crudbody {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 .project__works__crudbody-input {
-  border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 5px;
-  outline: none;
-  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 14px;
+  width: 100%;
 }
 
 .project__works__crudbody__buttongroup {
   display: flex;
-  gap: 5px;
-  justify-content: space-between;
+  gap: 8px;
 }
 
 .project__works__crudbody__buttongroup-button,
 .project__works__crudbody-button {
-  background-color: #2e78bd;
-  color: white;
+  flex: 1;
+  padding: 6px 10px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
+  font-size: 13px;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-/* При маленьком экране показывать только иконку */
+.project__works__crudbody__buttongroup-button {
+  background-color: #2e78bd;
+  color: white;
+}
+
+.project__works__crudbody-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.project__works__crudbody__buttongroup-button:hover {
+  background-color: #1e5a96;
+}
+
+.project__works__crudbody-button:hover {
+  background-color: #bb2d3b;
+}
+
+.project__placeholder {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: #ffffff;
+}
+
+/* Адаптивность для мобильных устройств */
 @media (max-width: 768px) {
-  .button-text {
-    display: none;
-  }
+  /* .project__window {
+    flex-direction: column;
+  } */
+  
+  /* .project__sidebar {
+    width: 100%;
+    max-height: 40vh;
+  } */
 }

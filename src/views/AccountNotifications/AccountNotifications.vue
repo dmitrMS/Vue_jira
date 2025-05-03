@@ -1,36 +1,32 @@
 <template>
-  <div class="all-body">
-    <div id="components-demo">
+  <div class="notifications">
+    <!-- <div id="components-demo">
       <auth-layout v-if="role == 'user'" />
       <admin-layout v-else />
-    </div>
-    <div class="track-body">
-    </div>
+    </div> -->
+    <Menubar/>
     <h2>Уведомления</h2>
-    <div class="works">
-      <Panel v-for="item in notifications" :key="item" style="height: 100px">
+    <div class="notifications__group">
+      <div v-for="item in notifications" :key="item" class="notifications__group__crudbody">
         <div class="crud-body">
           <p class="m-0">
             Приглашение в команду: {{ item.reason }}
           </p>
-          <Button
-            label="Принять"
-            severity="danger"
+          <button
             @click="teamAgree(item.id,item.data_id)"
-          />
-          <Button
-            label="Отклонить"
-            severity="danger"
+          >Принять</button>
+          <button
             @click="deleteTeam(item.id)"
-          />
+          >Отклонить</button>
         </div>
-      </Panel>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { toRaw } from 'vue';
+import './AccountNotifications.css';
 
 export default {
   data() {
@@ -61,6 +57,7 @@ export default {
       );
 
       this.notifications = this.notifications.data;
+      console.log(this.notifications.data);
     },
     async deleteNotification(notification_id) { // отклонение приглашения в команду
       const config = {

@@ -1,5 +1,5 @@
 <template>
-  <div class="tasks">
+  <div v-if="!openTrack" class="tasks">
     <h2>Задания проекта: {{ project_name }}</h2>
     <div class="tasks__parameters">
       <input
@@ -16,7 +16,7 @@
       </button>
     </div>
     <div class="tasks__works">
-      <div v-for="item in projectTasks" :key="item" style="height: 100px">
+      <div v-for="item in projectTasks" :key="item">
         <div class="tasks__works__crudbody">
           Название:
           <input
@@ -34,9 +34,15 @@
           <div class="track__works__crudbody__buttongroup">
             <button
               class="tasks__works__crudbody-button"
-              @click="SelectTask(item.id)"
+              @click="selectTask(item)"
             >
               Выбрать
+            </button>
+            <button
+              class="tasks__works__crudbody-button"
+              @click="sendTaskTrack(item)"
+            >
+              Трэкинг
             </button>
             <button
               class="tasks__works__crudbody-button"
@@ -47,6 +53,13 @@
           </div>
         </div>
       </div>
+      <TaskSidebar
+        :selected-task="selectedTask"
+        @update="handleTaskUpdate"
+        @close="selectedTask = null"
+        @edit="handleTaskEdit"
+        @delete="handleTaskDelete"
+      />
       <!-- <Dialog
         v-model:visible="visible"
         maximizable
@@ -59,6 +72,7 @@
       </Dialog> -->
     </div>
   </div>
+  <trackPageComponent v-else @close="openTrack = false"/>
 </template>
 
 <script>
@@ -70,10 +84,12 @@ export default {
     return {
       // teamName: localStorage.getItem('team_name'),
       visible: false,
+      openTrack: false,
       // project_id: localStorage.getItem('team_id'),
       projectTasks: [],
       username: localStorage.getItem('login'),
-      role: localStorage.getItem('role')
+      role: localStorage.getItem('role'),
+      selectedTask: null
     };
   },
   name: 'ProjectTasksPage',
@@ -98,6 +114,30 @@ export default {
     }
   },
   methods: {
+    handleTaskUpdate(updatedTask) {
+      // Обновляем задачу в родительском компоненте
+      this.selectedTask = updatedTask;
+      
+      // // Если нужно обновить в общем списке задач:
+      // const index = this.tasks.findIndex(t => t.id === updatedTask.id);
+      // if (index !== -1) {
+      //   this.tasks.splice(index, 1, updatedTask);
+      // }
+    },
+    closeSidebar() {
+      this.selectedTask = null;
+    },
+    async selectTask(task) {
+      this.selectedTask = task;
+    },
+    async sendTaskTrack(task) {
+      this.openTrack=true;
+
+      await this.$store.dispatch('updateTaskId', task);
+    },
+    async backTaskTrack() {
+      this.openTrack=false;
+    },
     async showTask() {
       // показание заданий команды
       console.log(this.project_id);
@@ -141,7 +181,7 @@ export default {
       };
 
       await this.axios.delete(
-        process.env.VUE_APP_URL + '/task/delete'`/${task_id}`,
+        process.env.VUE_APP_URL + `/task/delete/${task_id}`,
         config
       );
 
@@ -165,9 +205,6 @@ export default {
 
       this.visible = true;
       this.showTask();
-    },
-    async selectTask() {
-      // this.$router.push({ path: '/track' });
     }
   }
   // mounted() {

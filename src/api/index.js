@@ -126,9 +126,9 @@ export class Api {
     return JSON.parse(localStorage.getItem('works'));
   }
 
-  updateTeam(team_id, team_name) {
-    localStorage.setItem('team_id', team_id);
-    localStorage.setItem('team_name', team_name);
+  updateTeam(task_id, task_name) {
+    localStorage.setItem('task_id', task_id);
+    localStorage.setItem('task_name', task_name);
   }
 
   updateTeamCal(team_id_cal) {

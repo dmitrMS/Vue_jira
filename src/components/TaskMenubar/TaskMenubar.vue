@@ -50,7 +50,8 @@ export default {
       isMobileMenuVisible: false,
       menuItems: [
         { label: 'Задачи', component: 'projectTasks' },
-        { label: 'Диаграмма Ганта', component: 'ganttChart' }
+        { label: 'Диаграмма Ганта', component: 'ganttChart' },
+        { label: 'Команда', component: 'teamProject' }
       ],
       projectTasks: [],
     };

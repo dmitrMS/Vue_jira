@@ -41,7 +41,7 @@ export default {
       // Пункты меню
       menuItems: [{ label: "Проекты", route: "/projects" },
         { label: "Трэкинг", route: "/track" },
-        { label: "Команда", route: "/team" },],
+        { label: "Уведомления", route: "/notifications" },],
       // Индекс выбранного пункта, по нему идёт опредение активности
       selectedIndex: null,
       isMobileMenuVisible: false

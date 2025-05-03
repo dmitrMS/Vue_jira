@@ -9,7 +9,7 @@ import accountTrackingTeam from '../views/AccountTrackingTeam.vue';
 import teamUpdate from '../views/TeamUpdate.vue';
 import teamUsers from '../views/TeamUsers.vue';
 import teamTasks from '../views/TeamTasks.vue';
-import accountNotifications from '../views/AccountNotifications.vue';
+import accountNotifications from '../views/AccountNotifications/AccountNotifications.vue';
 
 // настройка маршрутизации
 const routes = [
