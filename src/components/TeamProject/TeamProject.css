@@ -6,6 +6,97 @@
     width: 100%;
 }
 
+.team-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.team-header h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.invite-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.invite-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.invite-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.invite-button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.invite-button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.invite-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.notification-content {
+  padding: 15px 20px;
+  border-radius: 4px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 300px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification-content.success {
+  background-color: #27ae60;
+}
+
+.notification-content.error {
+  background-color: #e74c3c;
+}
+
+.notification-content.warning {
+  background-color: #f39c12;
+}
+
+.notification-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
 .team__parameters {
   margin: 0 0;
   font-style: italic;
@@ -43,36 +134,84 @@
 } */
 
 .team__users {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 0;
 }
 
-.team__users__crudbody {
-    display: flex;
-    background-color: var(--text-color-white);
-    border-bottom: 1px var(--border-color) solid;
-    align-items: center;
-    padding: 1%;
-    padding-left: 5%;
+.user-row {
+  height: 60px;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
-.team__users__crudbody-input
-{
-  margin-left: 1%;
-  margin-right: 1%;
-  border-left: 0;
-  border-right: 0;
-  border-top: 0;
+.user-crud {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 0 12px;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.field label {
+  margin-right: 6px;
+  font-size: 14px;
+  color: #555;
+}
+
+.crud-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 8px;
+  font-size: 14px;
+  transition: border 0.2s;
+}
+
+.crud-input:focus {
+  border-color: #4285f4;
   outline: none;
 }
 
-.team__users__crudbody__buttongroup {
-  display: flex;
-  margin-left: 2%;
-  justify-content: flex-end;
+.num-input {
+  width: 50px;
+  text-align: center;
 }
 
-.team__users__crudbody-button {
-  margin-right: 10%;
+.crud-select {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px;
+  font-size: 14px;
+  background: white;
+}
+
+.delete-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #e53935;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: rgba(229, 57, 53, 0.1);
+}
+
+.user-row:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 

@@ -13,7 +13,7 @@
         <!-- </FloatLabel> -->
         <p>пароль:</p>
         <!-- <FloatLabel> -->
-          <input type="password" v-model="password" inputId="password" />
+          <input type="password" v-model="password" inputId="password" @keyup.enter="getAuthentification"/>
             <!-- <template #header>
               <h6>Введите пароль</h6>
             </template>

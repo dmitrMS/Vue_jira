@@ -11,7 +11,7 @@
         <p>логин:</p>
         <input id="username" v-model="login" />
         <p>пароль:</p>
-        <input type="password" v-model="password" :feedback="false" />
+        <input type="password" v-model="password" :feedback="false" @keyup.enter="getAuthentification"/>
       </div>
       <button role="button" @click="getAuthentification">Войти</button>
       <p>{{ serverMessage }}</p>

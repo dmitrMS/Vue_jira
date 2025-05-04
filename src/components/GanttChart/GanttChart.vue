@@ -1,86 +1,147 @@
 <template>
   <div>
-      <svg ref="gantt" />
+    <FrappeGantt
+      v-if="validTasks.length > 0"
+      :tasks="validTasks"
+      :view-mode="viewMode"
+      @task-updated="handleTaskUpdate"
+    />
+    <div v-else class="empty-message">
+      Нет задач для отображения
+    </div>
   </div>
 </template>
 
 <script>
-import Gantt from 'frappe-gantt';
-
 export default {
-  name: 'FrappeGantt',
-  props: {
-      viewMode: {
-          type: String,
-          required: false,
-          default: 'Month'
-      },
-      tasks: {
-          type: Array,
-          required: true,
-          // eslint-disable-next-line vue/require-valid-default-prop
-          default: []
-      }
+  name: 'GanttChart',
+  data() {
+    return {
+      projectTasks: []
+    };
   },
-  data () {
-      return {
-          gantt: {},
-      };
+  computed: {
+    validTasks() {
+      return this.projectTasks.filter(task => task !== null && task.start && task.end);
+    }
+  },
+  props: {
+    viewMode: {
+      type: String,
+      default: 'Month'
+    },
+    project_id: {
+      type: Number,
+      required: true
+    },
+    project_name: {
+      type: String,
+      required: true
+    }
   },
   watch: {
-      viewMode () {
-          this.updateViewMode();
-      },
-
-      tasks () {
-          this.updateTasks();
+    project_id: {
+      immediate: true,
+      handler(newId) {
+        if (newId) {
+          this.showTask(newId);
+        }
       }
+    }
   },
-  mounted () {
-      this.setupGanttChart();
+  mounted() {
+    if (this.project_id) {
+      this.showTask();
+    }
   },
   methods: {
-      setupGanttChart () {
-          this.gantt = new Gantt(this.$refs.gantt, this.tasks, {
-              on_click: task => {
-                  this.$emit('task-updated', task);
-              },
+    async showTask() {
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-key': localStorage.getItem('jwt')
+          }
+        };
 
-              on_date_change: (task, start, end) => {
-                  this.$emit('task-date-updated', { task, start, end });
-              },
+        const response = await this.axios.get(
+          `${process.env.VUE_APP_URL}/project/tasks/list/${this.project_id}`,
+          config
+        );
 
-              on_progress_change: (task, progress) => {
-                  this.$emit('task-progress-updated', { task, progress });
-              },
-
-              //I doubt you will ever need this as the developer already knows what view mode they set.
-              on_view_change: (mode) => {
-                  this.$emit('view-mode-updated', mode);
-              }
-          });
-
-          this.updateTasks();
-          this.updateViewMode();
-      },
-
-      updateViewMode () {
-          this.gantt.change_view_mode(this.viewMode[0].toUpperCase() + this.viewMode.substring(1));
-      },
-
-      updateTasks () {
-          this.gantt.refresh(this.tasks);
+        if (response.data && Array.isArray(response.data)) {
+          this.projectTasks = response.data
+            .map(task => this.convertToGanttTask(task))
+            .filter(task => task !== null); // Фильтруем null значения сразу
+        } else {
+          this.projectTasks = [];
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке задач:', error);
+        this.projectTasks = [];
       }
+    },
+    
+    convertToGanttTask(originalTask) {
+      if (!originalTask || !originalTask.id || !originalTask.begin_date || !originalTask.end_date) {
+        console.warn('Некорректные данные задачи:', originalTask);
+        return null;
+      }
+
+      const startDate = this.formatDate(originalTask.begin_date);
+      const endDate = this.formatDate(originalTask.end_date);
+
+      if (!startDate || !endDate) {
+        console.warn('Некорректные даты задачи:', originalTask);
+        return null;
+      }
+
+      return {
+        id: originalTask.id.toString(),
+        name: originalTask.name || 'Без названия',
+        start: startDate,
+        end: endDate,
+        progress: this.calculateProgress(originalTask.status_id),
+        dependencies: '',
+        custom_class: '',
+        description: originalTask.description || ''
+      };
+    },
+    
+    formatDate(dateString) {
+      if (!dateString) return null;
+      try {
+        // Обрабатываем разные форматы даты
+        if (dateString.includes('T')) {
+          return dateString.split('T')[0];
+        }
+        return dateString.split(' ')[0]; // На случай, если дата приходит с временем без 'T'
+      } catch (e) {
+        console.warn('Ошибка форматирования даты:', dateString);
+        return null;
+      }
+    },
+    
+    calculateProgress(statusId) {
+      const statusMap = {
+        1: 0,    // Не начато
+        2: 50,   // В работе
+        3: 100   // Завершено
+      };
+      return statusMap[statusId] || 0;
+    },
+    
+    handleTaskUpdate(task) {
+      this.$emit('task-updated', task);
+    }
   }
 };
 </script>
 
 <style>
-@import url('https://unpkg.com/frappe-gantt@latest/dist/frappe-gantt.min.css');
-
-.gantt-container {
-    background-color: white;
-    height: 100vh;
+.empty-message {
+  padding: 20px;
+  text-align: center;
+  color: #666;
 }
-
 </style>

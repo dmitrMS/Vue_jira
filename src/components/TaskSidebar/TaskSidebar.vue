@@ -39,6 +39,20 @@
           </div>
 
           <div class="form-group">
+            <label>Исполнитель:</label>
+            <select v-model="editedTask.executor_id" class="form-select">
+              <option
+                v-for="users in usersOptions"
+                :value="users.id"
+                :key="users.id"
+              >
+                {{ users.login }}
+              </option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
             <label>Начало срока:</label>
             <input
               type="date"
@@ -96,6 +110,17 @@
           </div>
 
           <div class="info-row">
+            <span class="info-label">Автор:</span>
+            <span class="info-value">{{ getUserText(selectedTask.author_id) || 'Не указан' }}</span>
+          </div>
+
+
+          <div class="info-row">
+            <span class="info-label">Исполнитель:</span>
+            <span class="info-value">{{ getUserText(selectedTask.executor_id) || 'Не указан' }}</span>
+          </div>
+
+          <div class="info-row">
             <span class="info-label">Начало срока:</span>
             <span class="info-value">
               {{
@@ -140,6 +165,7 @@
 
 <script>
 import './TaskSidebar.css';
+import { toRaw } from 'vue';
 
 export default {
   name: 'TaskSidebar',
@@ -154,6 +180,7 @@ export default {
       isOpen: false,
       isEditing: false,
       editedTask: null,
+      usersOptions: [],
       statusOptions: []
     };
   },
@@ -164,6 +191,7 @@ export default {
         if (newVal) {
           this.resetEditing();
           this.installStatus();
+          this.installUsers()
           // this.loadStatusOptions();
         }
       },
@@ -186,6 +214,25 @@ export default {
       // console.log(this.statusOptions);
 
       this.statusOptions = this.statusOptions.data;
+    },
+    async installUsers() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      this.usersOptions = toRaw(
+        await this.axios.get(
+          process.env.VUE_APP_URL + `/user_team/list/${Number(this.selectedTask.project_id)}`,
+          // { team_id: Number(this.teamId) },
+          config
+        )
+      );
+      // console.log(this.statusOptions);
+
+      this.usersOptions = this.usersOptions.data;
     },
     resetEditing() {
       this.editedTask = {
@@ -237,7 +284,8 @@ export default {
           description: this.editedTask.description,
           status_id: this.editedTask.status_id,
           begin_date: formatForServer(this.editedTask.begin_date_formatted),
-          end_date: formatForServer(this.editedTask.end_date_formatted)
+          end_date: formatForServer(this.editedTask.end_date_formatted),
+          executor_id: this.editedTask.executor_id
         },
         config
       );
@@ -248,7 +296,8 @@ export default {
       description: this.editedTask.description,
       status_id: this.editedTask.status_id,
       begin_date: formatForServer(this.editedTask.begin_date_formatted),
-      end_date: formatForServer(this.editedTask.end_date_formatted)
+      end_date: formatForServer(this.editedTask.end_date_formatted),
+      executor_id: this.editedTask.executor_id,
     };
 
 
@@ -286,6 +335,11 @@ export default {
       // return this.statusOptions[status]?.name || 'Неизвестный статус';
       const status = this.statusOptions.find((item) => item.id === status_id);
       return status ? status.name : 'Неизвестный статус';
+    },
+    getUserText(user_id) {
+      // return this.statusOptions[status]?.name || 'Неизвестный статус';
+      const user = this.usersOptions.find((item) => item.id === user_id);
+      return user ? user.login : 'Не указан';
     },
     formatDate(dateString) {
       if (!dateString) return '';

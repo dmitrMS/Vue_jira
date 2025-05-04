@@ -5,48 +5,72 @@
         <admin-layout v-else />
         <team-layout />
       </div> -->
-    <div class="team__parameters">
+    <!-- <div class="team__parameters">
       <input
         type="text"
         class="team__parameters-input"
         placeholder="Введите логин пользователя"
         v-model="userLogin"
       />
-      <button class="team__parameters-button" @click="inviteUser(this.userLogin, this.teamId)">
+      <button class="team__parameters-button" @click="inviteUser(this.userLogin)">
         Отправить приглашение
       </button>
+    </div> -->
+    <div class="team-header">
+      <h2>Управление командой проекта: {{ project_name }}</h2>
+      <div class="invite-controls">
+        <input
+          type="text"
+          class="invite-input"
+          placeholder="Введите логин пользователя"
+          v-model="userLogin"
+          @keyup.enter="inviteUser(userLogin)"
+        />
+        <button 
+          class="invite-button"
+          @click="inviteUser(userLogin)"
+          :disabled="!userLogin"
+        >
+          Отправить приглашение
+        </button>
+      </div>
     </div>
+
+    <div class="notification" v-if="notification.show">
+      <div class="notification-content" :class="notification.type">
+        {{ notification.message }}
+        <button @click="hideNotification" class="notification-close">×</button>
+      </div>
+    </div>
+
     <div class="team__users">
-      <Panel v-for="item in teamUsers" :key="item" style="height: 100px">
-        <div class="team__users__crudbody">
-          <p class="m-0">
-            Логин:
-            <input
-              type="text"
-              class="team__users__crudbody-input"
-              placeholder="логин"
-              v-model="item.login"
-            />
-            Роль:<input
-              type="text"
-              class="team__users__crudbody-input"
-              placeholder="роль"
-              v-model="item.role"
-            />
-            Колличество работ:<input
-              type="text"
-              class="team__users__crudbody-input"
-              placeholder="работы"
-              v-model="item.numTeamWorks"
-            />
-          </p>
-          <button
-            class="team__users__crudbody-button"
-            @click="deleteUserTeam(item.user_id, item.team_id)"
-          >Удалить</button>
+      <div v-for="item in teamUsers" :key="item.user_id" class="user-row">
+        <div class="user-crud">
+          <span class="field">
+            <label>Логин:</label>
+            <input type="text" v-model="item.login" class="crud-input" placeholder="логин" />
+          </span>
+          <span class="field">
+            <label>Роль:</label>
+            <select v-model="item.role" class="crud-select">
+              <option value="member">Участник</option>
+              <option value="manager">Менеджер</option>
+              <option value="admin">Админ</option>
+            </select>
+          </span>
+          <span class="field">
+            <label>Работы:</label>
+            <input type="number" v-model="item.numTeamWorks " class="crud-input num-input" min="0" />
+          </span>
+          <button @click="deleteUserTeam(item.user_id, item.team_id)" class="delete-btn">
+            <!-- <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+            </svg> -->
+            Удалить
+          </button>
         </div>
-      </Panel>
-      <Dialog
+      </div>
+      <!-- <Dialog
         v-model:visible="visible"
         maximizable
         modal
@@ -55,7 +79,7 @@
         :breakpoints="{ '1199px': '75vw', '575px': '90vw' }"
       >
         <p class="m-0">Приглашение отправлено пользователю</p>
-      </Dialog>
+      </Dialog> -->
     </div>
   </div>
 </template>
@@ -73,7 +97,13 @@ export default {
       teamId: localStorage.getItem('team_id'),
       teamUsers: [],
       username: localStorage.getItem('login'),
-      role: localStorage.getItem('role')
+      role: localStorage.getItem('role'),
+      notification: {
+        show: false,
+        message: '',
+        type: 'success'
+      },
+      showConfirmDialog: false,
     };
   },
   name: 'UserTeamPage',
@@ -116,7 +146,7 @@ export default {
       );
 
       this.teamUsers = this.teamUsers.data;
-      console.log(this.teamUsers);
+      // console.log(this.teamUsers);
     },
     async deleteUserTeam(user_id, team_id) {
       // удалить участника команды
@@ -138,7 +168,7 @@ export default {
 
       this.ShowUserTeam();
     },
-    async inviteUser(login, team_id) {
+    async inviteUser(login) {
       // пригласть участника в команду
       const config = {
         headers: {
@@ -148,11 +178,28 @@ export default {
       };
       await this.axios.post(
         process.env.VUE_APP_URL + '/team/add_user',
-        { login: login, team_id: team_id },
+        { login: login, team_id: 2 },
         config
       );
 
+      this.showNotification(`Приглашение отправлено пользователю ${login}`, 'success');
+
       this.visible = true;
+    },
+    showNotification(message, type = 'success') {
+      this.notification = {
+        show: true,
+        message,
+        type
+      };
+      
+      // Автоматическое скрытие через 5 секунд
+      setTimeout(() => {
+        this.hideNotification();
+      }, 5000);
+    },
+    hideNotification() {
+      this.notification.show = false;
     }
   },
   mounted() {
