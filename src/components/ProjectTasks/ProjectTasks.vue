@@ -1,22 +1,43 @@
 <template>
-  <div v-if="!openTrack" class="tasks">
-    <h2>Задания проекта: {{ project_name }}</h2>
-    <div class="tasks__parameters">
+  <!-- <div class="team-header">
+    <h2>Управление командой проекта: {{ project_name }}</h2>
+    <div class="invite-controls">
       <input
-        class="tasks__parameters-input"
         type="text"
-        placeholder="Название задания"
-        v-model="nameTask"
+        class="invite-input"
+        placeholder="Введите логин пользователя"
+        v-model="userLogin"
+        @keyup.enter="inviteUser(userLogin)"
       />
       <button
-        class="tasks__parameters-button"
-        @click="createTask(this.nameTask, this.project_id)"
+        class="invite-button"
+        @click="inviteUser(userLogin)"
+        :disabled="!userLogin"
       >
-        Создать
+        Отправить приглашение
       </button>
     </div>
+  </div> -->
+  <div v-if="!openTrack" class="tasks">
+    <div class="tasks-header">
+      <h2>Задания проекта: {{ project_name }}</h2>
+      <div class="tasks__header-controls">
+        <input
+          class="tasks__header-input"
+          type="text"
+          placeholder="Название задания"
+          v-model="nameTask"
+        />
+        <button
+          class="tasks__header-button"
+          @click="createTask(this.nameTask, this.project_id)"
+        >
+          Создать
+        </button>
+      </div>
+    </div>
     <div class="tasks__works">
-      <div v-for="item in projectTasks" :key="item">
+      <div v-for="item in projectTasks" :key="item" class="user-row">
         <div class="tasks__works__crudbody">
           Название:
           <input
@@ -31,7 +52,7 @@
             placeholder="работы"
             v-model="item.numTaskWorks"
           />
-          <div class="track__works__crudbody__buttongroup">
+          <div class="tasks__works__crudbody__buttongroup">
             <button
               class="tasks__works__crudbody-button"
               @click="selectTask(item)"
@@ -54,6 +75,7 @@
         </div>
       </div>
       <TaskSidebar
+        :tasks="this.projectTasks"
         :selected-task="selectedTask"
         @update="handleTaskUpdate"
         @close="selectedTask = null"
@@ -72,7 +94,7 @@
       </Dialog> -->
     </div>
   </div>
-  <trackPageComponent v-else @close="openTrack = false"/>
+  <trackPageComponent v-else @close="openTrack = false" />
 </template>
 
 <script>
@@ -117,7 +139,7 @@ export default {
     handleTaskUpdate(updatedTask) {
       // Обновляем задачу в родительском компоненте
       this.selectedTask = updatedTask;
-      
+
       // // Если нужно обновить в общем списке задач:
       // const index = this.tasks.findIndex(t => t.id === updatedTask.id);
       // if (index !== -1) {
@@ -131,16 +153,16 @@ export default {
       this.selectedTask = task;
     },
     async sendTaskTrack(task) {
-      this.openTrack=true;
+      this.openTrack = true;
 
       await this.$store.dispatch('updateTaskId', task);
     },
     async backTaskTrack() {
-      this.openTrack=false;
+      this.openTrack = false;
     },
     async showTask() {
       // показание заданий команды
-      console.log(this.project_id);
+      // console.log(this.project_id);
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -157,6 +179,13 @@ export default {
       );
 
       this.projectTasks = this.projectTasks.data;
+
+      // Сортируем задачи по created_at в возрастающем порядке
+      this.projectTasks = this.projectTasks.sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        return dateA - dateB; // Для убывания поменяйте местами dateA и dateB
+      });
 
       let numTaskWorks;
 

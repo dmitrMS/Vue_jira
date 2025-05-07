@@ -136,7 +136,7 @@
 .team__users {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
   padding: 8px 0;
 }
 
@@ -192,6 +192,21 @@
   padding: 6px;
   font-size: 14px;
   background: white;
+}
+
+.update-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #35e578;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.update-btn:hover {
+  background: rgba(229, 57, 53, 0.1);
 }
 
 .delete-btn {

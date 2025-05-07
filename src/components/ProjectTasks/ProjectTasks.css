@@ -1,12 +1,63 @@
-@import "@/assets/styles/global.css";
+@import '@/assets/styles/global.css';
 
 .tasks {
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-.tasks__parameters {
+.tasks-header {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.team-header h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.tasks__header-controls {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.tasks__header-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.tasks__header-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.tasks__header-button {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.tasks__header-button:hover:not(:disabled) {
+  background-color: #2980b9;
+}
+
+.tasks__header-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+/* .tasks__parameters {
   margin: 0 0;
   font-style: italic;
   display: inline-flex;
@@ -33,7 +84,7 @@
   font-size: 16pt;
   font-weight: normal;
   margin-left: 5%;
-}
+} */
 
 /* .all-body .crud {
   border: 0px solid;
@@ -43,20 +94,30 @@
 } */
 
 .tasks__works {
-  display: block;
+  /* display: block; */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
 }
 
 .tasks__works__crudbody {
-    display: flex;
+  /* display: flex;
     background-color: var(--text-color-white);
     border-bottom: 1px var(--border-color) solid;
     align-items: center;
     padding: 1%;
-    padding-left: 5%;
+    padding-left: 5%; */
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 0 12px;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.tasks__works__crudbody-input
-{
+.tasks__works__crudbody-input {
   margin-left: 1%;
   margin-right: 1%;
   border-left: 0;
@@ -67,12 +128,10 @@
 
 .tasks__works__crudbody__buttongroup {
   display: flex;
-  margin-left: 2%;
+  margin-left: 40%;
   justify-content: flex-end;
 }
 
 .tasks__works__crudbody-button {
   margin-right: 10%;
 }
-
-

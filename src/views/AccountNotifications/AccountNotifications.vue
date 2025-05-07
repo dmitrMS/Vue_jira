@@ -10,13 +10,13 @@
       <div v-for="item in notifications" :key="item" class="notifications__group__crudbody">
         <div class="crud-body">
           <p class="m-0">
-            Приглашение в команду: {{ item.reason }}
+            Приглашение в проект: {{ item.reason }}
           </p>
           <button
             @click="teamAgree(item.id,item.data_id)"
           >Принять</button>
           <button
-            @click="deleteTeam(item.id)"
+            @click="deleteNotification(item.id)"
           >Отклонить</button>
         </div>
       </div>
@@ -73,9 +73,9 @@ export default {
         config
       );
 
-      this.ShowWorkTime();
+      this.ShowNotifications();
     },
-    async teamAgree(notification_id,team_id) { // принятие приглашения в команду
+    async teamAgree(notification_id,project_id) { // принятие приглашения в команду
       const config = {
         headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default {
 
       await this.axios.patch(
         process.env.VUE_APP_URL + '/notification/update',
-        { notification_id:notification_id,team_id:team_id },
+        { notification_id:notification_id,project_id:project_id },
         config
       );
 

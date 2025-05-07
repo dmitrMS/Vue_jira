@@ -4,38 +4,24 @@
       <auth-layout v-if="role == 'user'" />
       <admin-layout v-else />
     </div> -->
-    <Menubar/>
+    <Menubar />
     <p class="track__timer">{{ workTime }}</p>
-    <div class="track__parameters">
-      <!-- <select
-        v-model="selectedTeam"
-        @click="this.selectTeam()"
-        class="track__parameters-dropdown"
-      >
-        <option>Без команды</option>
-        <option v-for="item in teams" :key="item">{{ item.name }}</option>
-      </select> -->
-      <input
-        class="track__parameters-input"
-        v-if="selectedTeam == 'Без команды'"
-        type="text"
-        placeholder="Назовите задание"
-        v-model="workName"
-      />
-      <!-- <select
-        v-else
-        v-model="selectedTask"
-        @click="this.selectTask()"
-        class="track__parameters-dropdown"
-      >
-        <option v-for="item in tasks" :key="item">{{ item.name }}</option>
-      </select> -->
-      <button
-        @click="trackingWorkTime(this.workName)"
-        class="track__parameters-button"
-      >
-        {{ workAppText }}
-      </button>
+    <div class="track__header">
+      <div class="invite-controls">
+        <input
+          class="track__header-input"
+          v-if="selectedTeam == 'Без команды'"
+          type="text"
+          placeholder="Назовите задание"
+          v-model="workName"
+        />
+        <button
+          @click="trackingWorkTime(this.workName)"
+          class="track__header-button"
+        >
+          {{ workAppText }}
+        </button>
+      </div>
     </div>
     <div class="track__works">
       <div v-for="item in works" :key="item">
@@ -132,9 +118,9 @@ export default {
       };
 
       // if (this.selectedTeam == 'Без команды') {
-        this.works = toRaw(
-          await this.axios.get(process.env.VUE_APP_URL + '/track/list', config)
-        );
+      this.works = toRaw(
+        await this.axios.get(process.env.VUE_APP_URL + '/track/list', config)
+      );
       // } else {
       //   console.log(toRaw(this.selectedTeamObj).id);
       //   this.works = toRaw(

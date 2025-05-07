@@ -52,16 +52,23 @@
           </span>
           <span class="field">
             <label>Роль:</label>
-            <select v-model="item.role" class="crud-select">
-              <option value="member">Участник</option>
-              <option value="manager">Менеджер</option>
-              <option value="admin">Админ</option>
+            <select v-model="item.role_id" class="crud-select">
+              <option
+                v-for="role in roleOptions"
+                :value="role.id"
+                :key="role.id"
+              >
+                {{ role.name }}
+              </option>
             </select>
           </span>
           <span class="field">
             <label>Работы:</label>
             <input type="number" v-model="item.numTeamWorks " class="crud-input num-input" min="0" />
           </span>
+          <button @click="updateRole(item.id,item.team_id,item.role_id)" class="update-btn">
+            Изменить роль
+          </button>
           <button @click="deleteUserTeam(item.user_id, item.team_id)" class="delete-btn">
             <!-- <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -104,6 +111,7 @@ export default {
         type: 'success'
       },
       showConfirmDialog: false,
+      roleOptions : []
     };
   },
   name: 'UserTeamPage',
@@ -128,6 +136,39 @@ export default {
     }
   },
   methods: {
+    async installRole() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      this.roleOptions = await this.axios.get(
+        process.env.VUE_APP_URL + `/role/list`,
+        config
+      );
+      // console.log(this.statusOptions);
+
+      this.roleOptions = this.roleOptions.data;
+    },
+    async updateRole(user_team_id,team_id,role_id) {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      await this.axios.patch(
+        process.env.VUE_APP_URL + `/user_team/update/${user_team_id}`,
+        {role_id: role_id},
+        config
+      );
+      // console.log(this.statusOptions);
+
+      this.ShowUserTeam();
+    },
     async ShowUserTeam() {
       // показать участиков команды
       const config = {
@@ -140,7 +181,6 @@ export default {
       this.teamUsers = toRaw(
         await this.axios.get(
           process.env.VUE_APP_URL + `/user_team/list/${Number(this.project_id)}`,
-          // { team_id: Number(this.teamId) },
           config
         )
       );
@@ -178,7 +218,7 @@ export default {
       };
       await this.axios.post(
         process.env.VUE_APP_URL + '/team/add_user',
-        { login: login, team_id: 2 },
+        { login: login, project_id: this.project_id, project_name: this.project_name},
         config
       );
 
@@ -204,6 +244,7 @@ export default {
   },
   mounted() {
     this.ShowUserTeam();
+    this.installRole()
   }
 };
 </script>

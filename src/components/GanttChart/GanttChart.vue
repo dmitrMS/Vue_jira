@@ -6,23 +6,26 @@
       :view-mode="viewMode"
       @task-updated="handleTaskUpdate"
     />
-    <div v-else class="empty-message">
-      Нет задач для отображения
-    </div>
+    <div v-else class="empty-message">Нет задач для отображения</div>
   </div>
 </template>
 
 <script>
+import { toRaw } from 'vue';
+
 export default {
   name: 'GanttChart',
   data() {
     return {
-      projectTasks: []
+      projectTasks: [],
+      taskDependencies: []
     };
   },
   computed: {
     validTasks() {
-      return this.projectTasks.filter(task => task !== null && task.start && task.end);
+      return this.projectTasks.filter(
+        (task) => task !== null && task.start && task.end
+      );
     }
   },
   props: {
@@ -45,6 +48,7 @@ export default {
       handler(newId) {
         if (newId) {
           this.showTask(newId);
+          this.showDependencies(newId);
         }
       }
     }
@@ -52,9 +56,36 @@ export default {
   mounted() {
     if (this.project_id) {
       this.showTask();
+      this.showDependencies();
     }
   },
   methods: {
+    async showDependencies() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      try {
+        const response = await this.axios.get(
+          `${process.env.VUE_APP_URL}/dependency/list/${this.project_id}`,
+          config
+        );
+        
+        this.taskDependencies = toRaw(response.data) || [];
+        
+        // После загрузки зависимостей обновляем задачи
+        if (this.projectTasks.length > 0) {
+          this.updateTasksWithDependencies();
+        }
+      } catch (error) {
+        console.error('Ошибка при загрузке зависимостей:', error);
+        this.taskDependencies = [];
+      }
+    },
+
     async showTask() {
       try {
         const config = {
@@ -70,9 +101,20 @@ export default {
         );
 
         if (response.data && Array.isArray(response.data)) {
-          this.projectTasks = response.data
-            .map(task => this.convertToGanttTask(task))
-            .filter(task => task !== null); // Фильтруем null значения сразу
+          this.projectTasks = response.data.sort((a, b) => {
+            const dateA = new Date(a.begin_date);
+            const dateB = new Date(b.begin_date);
+            return dateA - dateB;
+          });
+
+          this.projectTasks = this.projectTasks
+            .map((task) => this.convertToGanttTask(task))
+            .filter((task) => task !== null);
+
+          // Если зависимости уже загружены, обновляем задачи
+          if (this.taskDependencies.length > 0) {
+            this.updateTasksWithDependencies();
+          }
         } else {
           this.projectTasks = [];
         }
@@ -81,9 +123,37 @@ export default {
         this.projectTasks = [];
       }
     },
-    
+
+    updateTasksWithDependencies() {
+      // Создаем карту зависимостей: { mainTaskId: [dependencyTaskId1, dependencyTaskId2, ...] }
+      const dependenciesMap = {};
+      
+      this.taskDependencies.forEach(dep => {
+        if (!dependenciesMap[dep.main_task_id]) {
+          dependenciesMap[dep.main_task_id] = [];
+        }
+        dependenciesMap[dep.main_task_id].push(dep.dependency_task_id.toString());
+      });
+
+      // Обновляем задачи с зависимостями
+      this.projectTasks = this.projectTasks.map(task => {
+        if (dependenciesMap[task.id]) {
+          return {
+            ...task,
+            dependencies: dependenciesMap[task.id].join(',')
+          };
+        }
+        return task;
+      });
+    },
+
     convertToGanttTask(originalTask) {
-      if (!originalTask || !originalTask.id || !originalTask.begin_date || !originalTask.end_date) {
+      if (
+        !originalTask ||
+        !originalTask.id ||
+        !originalTask.begin_date ||
+        !originalTask.end_date
+      ) {
         console.warn('Некорректные данные задачи:', originalTask);
         return null;
       }
@@ -102,35 +172,34 @@ export default {
         start: startDate,
         end: endDate,
         progress: this.calculateProgress(originalTask.status_id),
-        dependencies: '',
+        dependencies: '', // Будет заполнено в updateTasksWithDependencies
         custom_class: '',
         description: originalTask.description || ''
       };
     },
-    
+
     formatDate(dateString) {
       if (!dateString) return null;
       try {
-        // Обрабатываем разные форматы даты
         if (dateString.includes('T')) {
           return dateString.split('T')[0];
         }
-        return dateString.split(' ')[0]; // На случай, если дата приходит с временем без 'T'
+        return dateString.split(' ')[0];
       } catch (e) {
         console.warn('Ошибка форматирования даты:', dateString);
         return null;
       }
     },
-    
+
     calculateProgress(statusId) {
       const statusMap = {
-        1: 0,    // Не начато
-        2: 50,   // В работе
-        3: 100   // Завершено
+        1: 0, // Не начато
+        2: 50, // В работе
+        3: 100 // Завершено
       };
       return statusMap[statusId] || 0;
     },
-    
+
     handleTaskUpdate(task) {
       this.$emit('task-updated', task);
     }

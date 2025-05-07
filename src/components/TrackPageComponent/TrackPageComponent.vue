@@ -2,14 +2,16 @@
   <div class="track">
     <button class="track__back-button" @click="$emit('close')">Закрыть</button>
     <p class="track__timer">{{ workTime }}</p>
-    <div class="track__parameters">
-      <p>{{ this.task_name }}</p>
+    <div class="track-header">
+      <div class="track__header-controls">
+        <h2>{{ this.task_name }}</h2>
       <button
         @click="trackingWorkTime(this.workName)"
-        class="track__parameters-button"
+        class="track__header-button"
       >
         {{ workAppText }}
       </button>
+    </div>
     </div>
     <div class="track__works">
       <div v-for="item in works" :key="item">

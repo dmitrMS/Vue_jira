@@ -13,7 +13,7 @@ import AdminLayout from './Layout/LayoutAdmin.vue';
 import teamLayout from './Layout/LayoutTeam.vue';
 import CalendarTime from './components/Calendar.vue';
 import CalendarTimeTeam from './components/CalendarTeam.vue';
-// import PrimeVue from 'primevue/config';
+import PrimeVue from 'primevue/config';
 import Menubar from './components/Menubar/Menubar.vue';
 import TaskMenubar from './components/TaskMenubar/TaskMenubar.vue';
 import TaskSidebar from './components/TaskSidebar/TaskSidebar.vue';
@@ -28,7 +28,10 @@ import GanttChart from './components/GanttChart/GanttChart.vue';
 // import InputText from 'primevue/inputtext';
 // import Panel from 'primevue/panel';
 // import Button from 'primevue/button';
-// import Dropdown from 'primevue/dropdown';
+import Dropdown from 'primevue/dropdown';
+import AutoComplete from 'primevue/autocomplete';
+import Button from 'primevue/button';
+import Chip from 'primevue/chip';
 import 'primevue/resources/themes/aura-light-green/theme.css';
 
 const app = createApp(App);
@@ -54,11 +57,14 @@ app.component('FrappeGantt', FrappeGantt);
 // app.component('Calendar', Calendar);
 // app.component('InputText', InputText);
 // app.component('Panel', Panel);
-// app.component('Button', Button);
-// app.component('Dropdown', Dropdown);
+app.component('Button', Button);
+app.component('AutoComplete', AutoComplete);
+app.component('Chip', Chip);
+// app.component('Tooltip', Tooltip);
+app.component('Dropdown', Dropdown);
 
 // подлючение библиотек для использования во всех vue компонентах без import
-// app.use(PrimeVue);
+app.use(PrimeVue);
 // app.use(Gantt);
 app.use(router);
 app.use(vueAxios, axios);
