@@ -30,17 +30,17 @@
       />
 
       <Dropdown
-      v-model="filters.userId"
-      :options="this.teamUsers"
-      optionLabel="login"
-      optionValue="id"
-      placeholder="Выберите исполнителя"
-      :filter="true"
-      filterPlaceholder="Поиск пользователей"
-      :showClear="true"
-      style="min-width: 120px"
-      @change="applyFilters"
-    ></Dropdown>
+        v-model="filters.userId"
+        :options="this.teamUsers"
+        optionLabel="login"
+        optionValue="id"
+        placeholder="Выберите исполнителя"
+        :filter="true"
+        filterPlaceholder="Поиск пользователей"
+        :showClear="true"
+        style="min-width: 120px"
+        @change="applyFilters"
+      ></Dropdown>
 
       <!-- Период (два DatePicker) -->
       <div class="p-d-flex p-ai-center p-mr-2">
@@ -97,13 +97,6 @@
         :class="{ 'p-button-primary': viewMode === 'Month' }"
         @click="viewMode = 'Month'"
       />
-      <!-- <Button
-        icon="pi pi-calendar"
-        label="Год"
-        class="p-button-sm p-ml-1"
-        :class="{ 'p-button-primary': viewMode === 'Year' }"
-        @click="viewMode = 'Year'"
-      /> -->
     </div>
 
     <FrappeGantt
@@ -118,6 +111,7 @@
 
 <script>
 import { toRaw } from 'vue';
+import Calendar from 'primevue/calendar';
 
 export default {
   name: 'GanttChart',
@@ -134,6 +128,9 @@ export default {
         dateTo: null
       }
     };
+  },
+  components: {
+    Calendar
   },
   computed: {
     filteredTasks() {
@@ -158,10 +155,7 @@ export default {
           }
 
           // Фильтрация по исполнителю
-          if (
-            this.filters.userId &&
-            task.executor_id != this.filters.userId
-          ) {
+          if (this.filters.userId && task.executor_id != this.filters.userId) {
             return false;
           }
 
@@ -207,8 +201,7 @@ export default {
     teamUsers: {
       type: Array,
       required: true,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default: []
+      default: () => []
     }
   },
   watch: {

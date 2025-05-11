@@ -180,23 +180,6 @@ export default {
         isLoading.value = false;
       }
     };
-
-    // // Выбор проекта
-    // const selectProject = async (id, name) => {
-    //   selectedProjectId.value = await id;
-    //   selectedProjectName.value = name;
-
-    //   const response = await axios.get(
-    //     `${process.env.VUE_APP_URL}/user_team/role/${selectedProjectId.value}`,
-    //     getAuthConfig()
-    //   );
-
-    //   // console.log(response.data.id);
-    //   await this.$store.dispatch('updateRoleId', response.data.id);
-    // };
-
-    // selectProject();
-
     // Обновление проекта
     const updateProject = async (project) => {
       try {

@@ -98,16 +98,6 @@ export default {
     };
   },
   name: 'TrackPage',
-  // props: {
-  //   task_id: {
-  //     type: Number,
-  //     required: true
-  //   },
-  //   task_name: {
-  //     type: Number,
-  //     required: true
-  //   }
-  // },
   computed: {
     task_id() {
       return this.$store.state.task_id;

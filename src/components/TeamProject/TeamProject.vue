@@ -109,7 +109,7 @@ export default {
       required: true
     },
     project_name: {
-      type: Number,
+      type: String,
       required: true
     },
   },

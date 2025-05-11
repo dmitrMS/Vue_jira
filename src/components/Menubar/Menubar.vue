@@ -1,8 +1,8 @@
 <template>
   <nav class="menubar">
-    <!-- <div class="logo">
-        <img src="@/assets/CADesign.svg" loading="lazy" />
-      </div> -->
+    <div class="menu__user-login">
+      Ваш логин: {{ this.userLogin }}
+    </div>
     <ul class="menu">
       <li
         v-for="(item, index) in menuItems"
@@ -68,9 +68,15 @@ export default {
       // Индекс выбранного пункта, по нему идёт опредение активности
       selectedIndex: null,
       isMobileMenuVisible: false,
-      notificationsCount: 0
+      notificationsCount: 0,
+      userLogin: localStorage.getItem('login')
     };
   },
+  // computed: {
+  //   userLogin() {
+  //     return this.$store.state.login;
+  //   }
+  // },
   methods: {
     // Активация элемента
     selectItem(index) {
@@ -111,11 +117,6 @@ export default {
   },
   mounted() {
     this.fetchNotificationsCount();
-    // Обновляем количество уведомлений каждые 30 секунд
-    // this.notificationsInterval = setInterval(this.fetchNotificationsCount, 30000);
   }
-  // beforeUnmount() {
-  //   clearInterval(this.notificationsInterval);
-  // }
 };
 </script>

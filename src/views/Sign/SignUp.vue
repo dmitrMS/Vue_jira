@@ -1,35 +1,12 @@
 <template>
-  <!-- <div id="components-demo">
-    <no-auth-layout> </no-auth-layout>
-  </div> -->
-  <Menubar/>
   <div class="authbodysign">
     <div class="authbodysign__text">
       <h1>Регистрация</h1>
       <div class="authbodysignin__text-block">
         <p>логин:</p>
-        <!-- <FloatLabel> -->
           <input id="username" v-model="login" />
-        <!-- </FloatLabel> -->
         <p>пароль:</p>
-        <!-- <FloatLabel> -->
           <input type="password" v-model="password" inputId="password" @keyup.enter="getAuthentification"/>
-            <!-- <template #header>
-              <h6>Введите пароль</h6>
-            </template>
-            <template #footer>
-              <Divider />
-              <p class="mt-2">Пароль должен содержать:</p>
-              <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
-                <li>Хотя бы одну букву в нижнем регистре</li>
-                <li>Хотя бы одну букву в верхнем регистре</li>
-                <li>Хотя бы одну цифру</li>
-                <li>1 спец символ</li>
-                <li>Минимум 8 символов</li>
-              </ul>
-            </template> -->
-          <!-- </input> -->
-        <!-- </FloatLabel> -->
       </div>
       <button @click="getAuthentification" role="link">
         Создать

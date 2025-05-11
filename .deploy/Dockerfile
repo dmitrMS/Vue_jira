@@ -1,5 +1,5 @@
 # broke normal building, because of low power vm at hosting
-FROM node:20.5.0-alpine as builder
+FROM node:20.5.0-bullseye as builder
 
 WORKDIR /app
 

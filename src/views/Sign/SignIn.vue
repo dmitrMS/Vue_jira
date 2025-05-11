@@ -1,9 +1,4 @@
 <template>
-  <!-- <div id="components-demo">
-    <no-auth-layout />
-  </div> -->
-  <!-- <button role="button" @click="getAuthentification">Войти</button> -->
-  <Menubar />
   <div class="authbodysign">
     <div class="authbodysign__text">
       <h1>Авторизация</h1>

@@ -92,10 +92,6 @@
         @click="resetFilters"
       />
     </div>
-
-    <!-- <div class="tasks__works"> -->
-    <!-- <div v-for="item in filteredTasks" :key="item.id" class="user-row"> -->
-
     <div class="tasks__works">
       <div v-for="item in filteredTasks" :key="item" class="user-row">
         <div class="tasks__works__crudbody">
@@ -106,12 +102,6 @@
             placeholder="Название"
             v-model="item.name"
           />
-          <!-- Колличество работ:<input
-            type="text"
-            class="tasks__works__crudbody-input"
-            placeholder="работы"
-            v-model="item.numTaskWorks"
-          /> -->
           Общее время работ:<input
             type="text"
             class="tasks__works__crudbody-input"
@@ -146,6 +136,7 @@
 
 <script>
 import { toRaw } from 'vue';
+import Calendar from 'primevue/calendar';
 import './ProjectTasks.css';
 
 export default {
@@ -169,6 +160,9 @@ export default {
       editableTask: { ...this.selectedTask }
     };
   },
+  components: {
+    Calendar
+  },
   name: 'ProjectTasksPage',
   props: {
     project_id: {
@@ -176,26 +170,23 @@ export default {
       required: true
     },
     project_name: {
-      type: Number,
+      type: String,
       required: true
     },
     statusOptions: {
       type: Array,
       required: true,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default: []
+      default: () => []
     },
     priorityOptions: {
       type: Array,
       required: true,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default: []
+      default: () => []
     },
     teamUsers: {
       type: Array,
       required: true,
-      // eslint-disable-next-line vue/require-valid-default-prop
-      default: []
+      default: () => []
     }
   },
   watch: {
@@ -208,10 +199,6 @@ export default {
       }
     }
   },
-  // mounted() {
-  //   this.installStatus();
-  //   this.installPriority();
-  // },
   methods: {
     applyFilters() {
       this.filteredTasks = this.projectTasks.filter((task) => {
