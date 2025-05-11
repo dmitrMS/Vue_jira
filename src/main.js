@@ -22,11 +22,12 @@ import TrackPageComponent from './components/TrackPageComponent/TrackPageCompone
 import TeamProject from './components/TeamProject/TeamProject.vue';
 import FrappeGantt from './components/GanttChart/FrappeGantt.vue';
 import GanttChart from './components/GanttChart/GanttChart.vue';
+import DataTable from 'primevue/datatable';
 // import Menu from 'primevue/menu';
 // import Password from 'primevue/password';
-// import Calendar from 'primevue/calendar';
-// import InputText from 'primevue/inputtext';
-// import Panel from 'primevue/panel';
+import Calendar from 'primevue/calendar';
+import InputText from 'primevue/inputtext';
+import Panel from 'primevue/panel';
 // import Button from 'primevue/button';
 import Dropdown from 'primevue/dropdown';
 import AutoComplete from 'primevue/autocomplete';
@@ -54,14 +55,15 @@ app.component('ganttChart', GanttChart);
 app.component('FrappeGantt', FrappeGantt);
 // app.component('Menu', Menu);
 // app.component('Password', Password);
-// app.component('Calendar', Calendar);
-// app.component('InputText', InputText);
-// app.component('Panel', Panel);
+app.component('Calendar', Calendar);
+app.component('InputText', InputText);
+app.component('Panel', Panel);
 app.component('Button', Button);
 app.component('AutoComplete', AutoComplete);
 app.component('Chip', Chip);
 // app.component('Tooltip', Tooltip);
 app.component('Dropdown', Dropdown);
+app.component('DataTable', DataTable);
 
 // подлючение библиотек для использования во всех vue компонентах без import
 app.use(PrimeVue);

@@ -1,20 +1,20 @@
 <template>
   <div class="track">
-    <button class="track__back-button" @click="$emit('close')">Закрыть</button>
+    <Button class="track__back-button" @click="$emit('close')">Закрыть</Button>
     <p class="track__timer">{{ workTime }}</p>
     <div class="track-header">
       <div class="track__header-controls">
-        <h2>{{ this.task_name }}</h2>
+        <h2>Задание: {{ this.task_name }}</h2>
       <button
         @click="trackingWorkTime(this.workName)"
-        class="track__header-button"
+        class="track__header__component-button"
       >
         {{ workAppText }}
       </button>
     </div>
     </div>
     <div class="track__works">
-      <div v-for="item in works" :key="item">
+      <div v-for="item in formattedWorks" :key="item">
         <div class="track__works__crudbody">
           Пользователь:
           <input
@@ -34,31 +34,34 @@
             type="text"
             class="track__works__crudbody-input"
             placeholder="дата начала"
-            v-model="item.begin_date"
+            v-model="item.formattedBegin"
+            @input="item.begin_date = $event.target.value"
           />
           Конец:<input
             type="text"
             class="track__works__crudbody-input"
             placeholder="дата окончания"
-            v-model="item.end_date"
+            v-model="item.formattedEnd"
+            @input="item.end_date = $event.target.value"
           />
           <div class="track__works__crudbody__buttongroup">
             <button
-              class="track__works__crudbody__buttongroup-button"
-              v-if="item.task_id == null"
+              class="update-btn"
               @click="
                 updateWorkTime(
                   item.id,
                   item.task_name,
-                  item.begin_date,
-                  item.end_date
+                  this.parseDateFormatted(item.formattedBegin),
+                  item.formattedEnd !== 'В процессе'
+                    ? this.parseDateFormatted(item.formattedEnd)
+                    : null
                 )
               "
             >
               Изменить
             </button>
             <button
-              class="track__works__crudbody-button"
+              class="delete-btn"
               @click="deleteWorkTime(item.id)"
             >
               Удалить
@@ -111,6 +114,15 @@ export default {
     },
     task_name() {
       return this.$store.state.task_name;
+    },
+    formattedWorks() {
+      return this.works.map((work) => ({
+        ...work,
+        formattedBegin: this.formatDate(work.begin_date),
+        formattedEnd: work.end_date
+          ? this.formatDate(work.end_date)
+          : 'В процессе'
+      }));
     }
   },
   watch: {
@@ -124,6 +136,39 @@ export default {
     }
   },
   methods: {
+    parseDateFormatted(formattedDate) {
+      if (formattedDate === 'В процессе') return null;
+
+      // Формат: "дд.мм.гггг, чч:мм:сс.мс"
+      const [datePart, timePart] = formattedDate.split(', ');
+      const [day, month, year] = datePart.split('.');
+      const [time, milliseconds] = timePart.split('.');
+      const [hours, minutes, seconds] = time.split(':');
+
+      return new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hours),
+        parseInt(minutes),
+        parseInt(seconds),
+        parseInt(milliseconds)
+      ).toISOString();
+    },
+    formatDate(isoDate) {
+      if (!isoDate) return 'В процессе';
+      const date = new Date(isoDate);
+      return (
+        date.toLocaleString('ru-RU', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) + `.${date.getMilliseconds().toString().padStart(3, '0')}`
+      );
+    },
     async showWorkTime() {
       // показ рабочего времени пользователя в одиночку, при выборе команды- в этой команде
       const config = {
@@ -151,12 +196,12 @@ export default {
         }
       };
 
-      this.works = toRaw(
+      // this.works = toRaw(
         await this.axios.delete(
           process.env.VUE_APP_URL + '/track/delete' + `/${id_work}`,
           config
-        )
-      );
+        );
+      // );
 
       this.showWorkTime();
     },
@@ -169,7 +214,7 @@ export default {
         }
       };
 
-      this.works = toRaw(
+      // this.works = toRaw(
         await this.axios.patch(
           process.env.VUE_APP_URL + '/track/update',
           {
@@ -179,8 +224,10 @@ export default {
             end_date: end_date
           },
           config
-        )
-      );
+        );
+      // );
+
+      this.$emit('update');
 
       this.showWorkTime();
     },

@@ -36,6 +36,9 @@
   :project_id="project_id"
   :project_name="project_name"
   :tasks="this.projectTasks"
+  :teamUsers="this.teamUsers"
+  :statusOptions="this.statusOptions"
+  :priorityOptions="this.priorityOptions"
 />
 </template>
 
@@ -54,6 +57,9 @@ export default {
         { label: 'Команда', component: 'teamProject' }
       ],
       projectTasks: [],
+      statusOptions: [],
+      priorityOptions: [],
+      teamUsers: []
     };
   },
   props: {
@@ -82,6 +88,55 @@ export default {
     }
   },
   methods: {
+    async ShowUserTeam() {
+      // показать участиков команды
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      this.teamUsers = toRaw(
+        await this.axios.get(
+          process.env.VUE_APP_URL +
+            `/user_team/list/${Number(this.project_id)}`,
+          config
+        )
+      );
+
+      this.teamUsers = this.teamUsers.data;
+      // console.log(this.teamUsers);
+    },
+    async installStatus() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      const response = await this.axios.get(
+        process.env.VUE_APP_URL + `/status/list`,
+        config
+      );
+      this.statusOptions = response.data;
+    },
+
+    async installPriority() {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-key': localStorage.getItem('jwt')
+        }
+      };
+
+      const response = await this.axios.get(
+        process.env.VUE_APP_URL + `/priority/list`,
+        config
+      );
+      this.priorityOptions = response.data;
+    },
     selectItem(index) {
       this.selectedIndex = index;
       this.isMobileMenuVisible = false;
@@ -111,6 +166,9 @@ export default {
   },
   mounted() {
     this.showTask();
+    this.installStatus();
+    this.installPriority();
+    this.ShowUserTeam();
   }
 };
 </script>

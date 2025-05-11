@@ -140,15 +140,3 @@
   font-size: 1.5rem;
   color: #ffffff;
 }
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-  /* .project__window {
-    flex-direction: column;
-  } */
-  
-  /* .project__sidebar {
-    width: 100%;
-    max-height: 40vh;
-  } */
-}

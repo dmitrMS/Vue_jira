@@ -8,6 +8,7 @@ export const store = createStore({
     jwt: '',
     login: '',
     password: '',
+    role_id: null,
     task_id: null,
     task_name: null,
     team_id_cal: null,
@@ -21,6 +22,9 @@ export const store = createStore({
     },
     changeTeamId(state, payload) {
       state.task_id = payload;
+    },
+    changeRoleId(state, payload) {
+      state.role_id = payload;
     },
     changeTeamName(state, payload) {
       state.task_name = payload;
@@ -68,6 +72,9 @@ export const store = createStore({
 
       commit('changeTeamId', note.id);
       commit('changeTeamName', note.name);
+    },
+    updateRoleId({ commit }, note) {
+      commit('changeRoleId', note);
     },
     updateTeamIdCal({ commit }, note) {
       api.updateTeamCal(note);

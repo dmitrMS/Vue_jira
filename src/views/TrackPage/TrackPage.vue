@@ -1,9 +1,5 @@
 <template>
   <div class="track">
-    <!-- <div id="components-demo">
-      <auth-layout v-if="role == 'user'" />
-      <admin-layout v-else />
-    </div> -->
     <Menubar />
     <p class="track__timer">{{ workTime }}</p>
     <div class="track__header">
@@ -24,9 +20,8 @@
       </div>
     </div>
     <div class="track__works">
-      <div v-for="item in works" :key="item">
+      <div v-for="item in formattedWorks" :key="item">
         <div class="track__works__crudbody">
-          <!-- <div class="track__works__crudbody-p"> -->
           Пользователь:
           <input
             type="text"
@@ -45,34 +40,34 @@
             type="text"
             class="track__works__crudbody-input"
             placeholder="дата начала"
-            v-model="item.begin_date"
+            v-model="item.formattedBegin"
+            @input="item.begin_date = $event.target.value"
           />
           Конец:<input
             type="text"
             class="track__works__crudbody-input"
             placeholder="дата окончания"
-            v-model="item.end_date"
+            v-model="item.formattedEnd"
+            @input="item.end_date = $event.target.value"
           />
-          <!-- </div> -->
           <div class="track__works__crudbody__buttongroup">
             <button
-              class="track__works__crudbody__buttongroup-button"
+              class="update-btn"
               v-if="item.task_id == null"
               @click="
                 updateWorkTime(
                   item.id,
                   item.task_name,
-                  item.begin_date,
-                  item.end_date
+                  this.parseDateFormatted(item.formattedBegin),
+                  item.formattedEnd !== 'В процессе'
+                    ? this.parseDateFormatted(item.formattedEnd)
+                    : null
                 )
               "
             >
               Изменить
             </button>
-            <button
-              class="track__works__crudbody-button"
-              @click="deleteWorkTime(item.id)"
-            >
+            <button class="delete-btn" @click="deleteWorkTime(item.id)">
               Удалить
             </button>
           </div>
@@ -107,7 +102,51 @@ export default {
     };
   },
   name: 'TrackPage',
+  computed: {
+    formattedWorks() {
+      return this.works.map((work) => ({
+        ...work,
+        formattedBegin: this.formatDate(work.begin_date),
+        formattedEnd: work.end_date
+          ? this.formatDate(work.end_date)
+          : 'В процессе'
+      }));
+    }
+  },
   methods: {
+    parseDateFormatted(formattedDate) {
+      if (formattedDate === 'В процессе') return null;
+
+      // Формат: "дд.мм.гггг, чч:мм:сс.мс"
+      const [datePart, timePart] = formattedDate.split(', ');
+      const [day, month, year] = datePart.split('.');
+      const [time, milliseconds] = timePart.split('.');
+      const [hours, minutes, seconds] = time.split(':');
+
+      return new Date(
+        parseInt(year),
+        parseInt(month) - 1,
+        parseInt(day),
+        parseInt(hours),
+        parseInt(minutes),
+        parseInt(seconds),
+        parseInt(milliseconds)
+      ).toISOString();
+    },
+    formatDate(isoDate) {
+      if (!isoDate) return 'В процессе';
+      const date = new Date(isoDate);
+      return (
+        date.toLocaleString('ru-RU', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        }) + `.${date.getMilliseconds().toString().padStart(3, '0')}`
+      );
+    },
     async showWorkTime() {
       // показ рабочего времени пользователя в одиночку, при выборе команды- в этой команде
       const config = {
@@ -117,95 +156,13 @@ export default {
         }
       };
 
-      // if (this.selectedTeam == 'Без команды') {
-      this.works = toRaw(
-        await this.axios.get(process.env.VUE_APP_URL + '/track/list', config)
+      this.works = await this.axios.get(
+        process.env.VUE_APP_URL + '/track/list',
+        config
       );
-      // } else {
-      //   console.log(toRaw(this.selectedTeamObj).id);
-      //   this.works = toRaw(
-      //     await this.axios.get(
-      //       process.env.VUE_APP_URL +
-      //         `/track/list/${toRaw(this.selectedTeamObj).id}`,
-      //       // { team_id: toRaw(this.selectedTeamObj).id },
-      //       config
-      //     )
-      //   );
-      // }
 
-      this.works = this.works.data;
+      this.works = toRaw(this.works.data);
     },
-    // async showTeam() {
-    //   // показ списка команд
-    //   const config = {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'x-auth-key': localStorage.getItem('jwt')
-    //     }
-    //   };
-
-    //   this.teams = await this.axios.get(
-    //     process.env.VUE_APP_URL + '/team/list',
-    //     config
-    //   );
-
-    //   this.teams = toRaw(this.teams);
-
-    //   this.teams = this.teams.data;
-
-    //   // this.showTasks();
-    // },
-    // async selectTeam() {
-    //   // выбор команды
-    //   if (this.selectedTeam !== 'Без команды') {
-    //     this.selectedTeamObj = this.teams.find(
-    //       (item) => item.name == this.selectedTeam
-    //     );
-    //     await this.showTasks();
-    //   }
-
-    //   // await this.showTasks();
-    //   try {
-    //     if (this.tasks.length !== 0) {
-    //       this.selectedTask = toRaw(this.tasks[0]).name;
-    //       await this.selectTask();
-    //     }
-    //     this.showWorkTime();
-    //   } catch (err) {
-    //     this.showWorkTime();
-    //   }
-    // },
-    // async selectTask() {
-    //   // выбор командного задания для трэкинга
-    //   if (this.selectedTeam !== 'Без команды' && this.tasks.length !== 0) {
-    //     this.selectedTaskObj = this.tasks.find(
-    //       (item) => item.name == this.selectedTask
-    //     );
-    //   }
-
-    //   this.showTasks();
-    // },
-    // async showTasks() {
-    //   // показ командных заданий
-    //   const config = {
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'x-auth-key': localStorage.getItem('jwt')
-    //     }
-    //   };
-
-    //   // console.log(toRaw(this.selectedTeamObj).id);
-    //   this.tasks = await this.axios.get(
-    //     process.env.VUE_APP_URL +
-    //       `/task/list/${toRaw(this.selectedTeamObj).id}`,
-    //     // { team_id: toRaw(this.selectedTeamObj).id },
-    //     config
-    //   );
-
-    //   this.tasks = toRaw(this.tasks);
-
-    //   this.tasks = this.tasks.data;
-    // },
     async deleteWorkTime(id_work) {
       // удаление записи о рабочем времени
       const config = {
@@ -215,12 +172,13 @@ export default {
         }
       };
 
-      this.works = toRaw(
-        await this.axios.delete(
-          process.env.VUE_APP_URL + '/track/delete' + `/${id_work}`,
-          config
-        )
+      // const response =
+      await this.axios.delete(
+        process.env.VUE_APP_URL + '/track/delete' + `/${id_work}`,
+        config
       );
+
+      // this.works = toRaw(response.data);
 
       this.showWorkTime();
     },
@@ -233,18 +191,18 @@ export default {
         }
       };
 
-      this.works = toRaw(
-        await this.axios.patch(
-          process.env.VUE_APP_URL + '/track/update',
-          {
-            id_work: id_work,
-            task_name: task_name,
-            begin_date: begin_date,
-            end_date: end_date
-          },
-          config
-        )
+      // this.works = toRaw(
+      await this.axios.patch(
+        process.env.VUE_APP_URL + '/track/update',
+        {
+          id_work: id_work,
+          task_name: task_name,
+          begin_date: begin_date,
+          end_date: end_date
+        },
+        config
       );
+      // );
 
       this.showWorkTime();
     },
@@ -314,11 +272,11 @@ export default {
       );
 
       if ((await data) == null) {
-        this.workAppText = 'Start';
+        this.workAppText = 'Начать';
       } else {
         const nowDate = new Date();
 
-        this.workAppText = 'Stop';
+        this.workAppText = 'Закончить';
         this.nowWork = true;
         this.time.seconds = Math.floor(
           (nowDate - Date.parse(data.begin_date)) / 1000
@@ -370,7 +328,6 @@ export default {
   mounted() {
     this.beginInterface();
     this.showWorkTime();
-    // this.showTeam();
     this.timer();
   }
 };

@@ -59,13 +59,13 @@
                 >
                   {{ item.id === selectedProjectId ? 'Выбран' : 'Выбрать' }}
                 </button>
-                <button
+                <!-- <button
                   class="project__works__crudbody__buttongroup-button"
                   v-if="!item.task_id"
                   @click="updateProject(item)"
                 >
                   Изменить
-                </button>
+                </button> -->
                 <button
                   class="project__works__crudbody-button"
                   @click="deleteProject(item.id)"
@@ -97,6 +97,27 @@ import axios from 'axios';
 
 export default {
   name: 'Projects',
+  methods: {
+    async selectProject(id, name) {
+      // <- Обычная функция, а не стрелочная!
+      const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'x-auth-key': localStorage.getItem('jwt')
+      }
+    };
+      this.selectedProjectId = id;
+      this.selectedProjectName = name;
+
+      const response = await axios.get(
+        `${process.env.VUE_APP_URL}/user_team/role/${this.selectedProjectId}`,
+        config
+      );
+
+      // console.log(name, response.data.role_id);
+      await this.$store.dispatch('updateRoleId', response.data.role_id);
+    }
+  },
   setup() {
     // Реактивные переменные
     const projectName = ref('');
@@ -130,6 +151,7 @@ export default {
           getAuthConfig()
         );
         projects.value = response.data;
+        projects.value = response.data.sort((a, b) => a.id - b.id);
       } catch (err) {
         error.value = 'Не удалось загрузить проекты';
         console.error('Ошибка при загрузке проектов:', err);
@@ -159,11 +181,21 @@ export default {
       }
     };
 
-    // Выбор проекта
-    const selectProject = (id, name) => {
-      selectedProjectId.value = id;
-      selectedProjectName.value = name;
-    };
+    // // Выбор проекта
+    // const selectProject = async (id, name) => {
+    //   selectedProjectId.value = await id;
+    //   selectedProjectName.value = name;
+
+    //   const response = await axios.get(
+    //     `${process.env.VUE_APP_URL}/user_team/role/${selectedProjectId.value}`,
+    //     getAuthConfig()
+    //   );
+
+    //   // console.log(response.data.id);
+    //   await this.$store.dispatch('updateRoleId', response.data.id);
+    // };
+
+    // selectProject();
 
     // Обновление проекта
     const updateProject = async (project) => {
@@ -219,7 +251,6 @@ export default {
       isSidebarCollapsed,
       toggleSidebar,
       createProject,
-      selectProject,
       updateProject,
       deleteProject
     };

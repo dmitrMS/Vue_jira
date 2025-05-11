@@ -250,16 +250,10 @@
 <script>
 import './TaskSidebar.css';
 import { toRaw } from 'vue';
-import Button from 'primevue/button';
-// import Dropdown from 'primevue/dropdown';
 import Tooltip from 'primevue/tooltip';
 
 export default {
   name: 'TaskSidebar',
-  components: {
-    Button
-    // Dropdown
-  },
   directives: {
     tooltip: Tooltip
   },
@@ -289,11 +283,13 @@ export default {
   computed: {
     parentTasks() {
       // Исправленное получение родительских задач
-    // Получаем только родительские задачи для текущего выбранного задания
-    return this.taskDependencies
-      .filter(dep => dep.main_task_id === this.selectedTask.id) // Фильтруем по текущему заданию
-      .map(dep => this.tasks.find(task => task.id === dep.dependency_task_id))
-      .filter(task => task && task.id !== this.selectedTask?.id);
+      // Получаем только родительские задачи для текущего выбранного задания
+      return this.taskDependencies
+        .filter((dep) => dep.main_task_id === this.selectedTask.id) // Фильтруем по текущему заданию
+        .map((dep) =>
+          this.tasks.find((task) => task.id === dep.dependency_task_id)
+        )
+        .filter((task) => task && task.id !== this.selectedTask?.id);
     },
     availableParentTasks() {
       return this.tasks.filter(
@@ -421,7 +417,9 @@ export default {
       );
 
       this.taskDependencies = this.taskDependencies.data;
-      this.taskDependencies = this.taskDependencies.filter(dep => dep.main_task_id === this.selectedTask.id);
+      this.taskDependencies = this.taskDependencies.filter(
+        (dep) => dep.main_task_id === this.selectedTask.id
+      );
 
       // // Сортируем задачи по created_at в возрастающем порядке
       // this.projectTasks = this.projectTasks.sort((a, b) => {
@@ -543,7 +541,7 @@ export default {
 
       // Обрабатываем зависимости
       const originalDeps = this.taskDependencies;
-      const currentDeps = this.editingDependencies
+      const currentDeps = this.editingDependencies;
       const originalIds = this.taskDependencies.map((dep) => dep.id);
       const currentIds = this.editingDependencies
         .filter((dep) => !dep.isNew)
@@ -557,14 +555,14 @@ export default {
         await this.deleteDependency(id);
       }
 
-      const depsToDelete = originalDeps.filter(origDep => 
-          !currentDeps.some(d => d.id === origDep.id)
-        );
+      const depsToDelete = originalDeps.filter(
+        (origDep) => !currentDeps.some((d) => d.id === origDep.id)
+      );
 
-        // Удаляем зависимости
-        for (const dep of depsToDelete) {
-          await this.deleteDependency(dep.id);
-        }
+      // Удаляем зависимости
+      for (const dep of depsToDelete) {
+        await this.deleteDependency(dep.id);
+      }
 
       // Добавляем новые зависимости
       const dependenciesToAdd = this.editingDependencies.filter(
@@ -583,6 +581,7 @@ export default {
 
       // Закрываем режим редактирования
       this.isEditing = false;
+      
 
       // Отправляем событие обновления
       const updatedTask = {
