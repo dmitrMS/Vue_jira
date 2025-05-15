@@ -4,13 +4,12 @@
     <template>
       <VErrorBoundary :fall-back="fallBack" stop-propagation> </VErrorBoundary>
     </template>
-    <!-- <footer-layout class="footer-bottom" /> -->
   </div>
 </template>
 
 <script>
 import { api } from './api/index.js';
-import MyCustomFallbackComponent from './views/ErrorBoundary.vue';
+import MyCustomFallbackComponent from './Pages/ErrorBoundary.vue';
 
 export default {
   data() {

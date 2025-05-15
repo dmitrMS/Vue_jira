@@ -9,7 +9,7 @@
         <input type="password" v-model="password" :feedback="false" @keyup.enter="getAuthentification"/>
       </div>
       <button role="button" @click="getAuthentification">Войти</button>
-      <p>{{ serverMessage }}</p>
+      <p>{{ this.serverMessage }}</p>
       <router-link to="/sign_up">У меня нет аккаунта</router-link>
     </div>
   </div>
@@ -36,6 +36,7 @@ export default {
         path: '/auth/signin'
       };
       const request = await this.$store.dispatch('getJwt', config);
+      console.log(request);
 
       this.serverMessage = request.message;
 

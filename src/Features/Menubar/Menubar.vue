@@ -1,7 +1,7 @@
 <template>
   <nav class="menubar">
     <div class="menu__user-login">
-      Ваш логин: {{ this.userLogin }}
+      <p>Ваш логин: {{ this.userLogin }}</p>
     </div>
     <ul class="menu">
       <li

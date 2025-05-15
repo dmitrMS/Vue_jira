@@ -13,20 +13,20 @@ export class Api {
       }
     });
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'x-auth-key': data.jwt
-      }
-    };
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'x-auth-key': data.jwt
+    //   }
+    // };
 
-    const dataUser = await axios.get(
-      process.env.VUE_APP_URL + '/auth/data',
-      config
-    );
+    // const dataUser = await axios.get(
+    //   process.env.VUE_APP_URL + '/auth/data',
+    //   config
+    // );
 
     localStorage.setItem('jwt', data.jwt);
-    localStorage.setItem('role', dataUser.data.role);
+    // localStorage.setItem('role', dataUser.data.role);
     localStorage.setItem('login', login);
 
     return data;
@@ -164,20 +164,20 @@ export class Api {
       //   }
       // };
 
-      const config1 = {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-auth-key': localStorage.getItem('jwt')
-        }
-      };
+      // const config1 = {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'x-auth-key': localStorage.getItem('jwt')
+      //   }
+      // };
 
-      const dataUser = await axios.get(
-        process.env.VUE_APP_URL + '/auth/data',
-        config1
-      );
+      // const dataUser = await axios.get(
+      //   process.env.VUE_APP_URL + '/auth/data',
+      //   config1
+      // );
 
       localStorage.setItem('jwt', data.jwt);
-      localStorage.setItem('role', dataUser.data.role);
+      // localStorage.setItem('role', dataUser.data.role);
 
       return localStorage.getItem('jwt');
     } catch {

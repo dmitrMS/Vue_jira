@@ -77,6 +77,14 @@
     margin-left: 4px;
     vertical-align: middle;
   }
+
+  .menu__user-login { 
+    margin: 0%;
+  }
+
+  .menu__user-login p { 
+    margin: 0%;
+  }
   
   @media (max-width: 1024px) {
     .menu__li-a {
